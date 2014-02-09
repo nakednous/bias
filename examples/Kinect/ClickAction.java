@@ -25,4 +25,3 @@ public enum ClickAction implements Actionable<GlobalAction> {
     act = a;
   }
 }
-

@@ -81,8 +81,8 @@ public class GrabbableCircle extends AbstractGrabber {
   @Override
   public boolean checkIfGrabsInput(TerseEvent event) {
     if (event instanceof GenericDOF2Event) {
-      float x = ((GenericDOF2Event<?>) event).getX();
-      float y = ((GenericDOF2Event<?>) event).getY();
+      float x = ((GenericDOF2Event<?>) event).x();
+      float y = ((GenericDOF2Event<?>) event).y();
       return (PApplet.pow((x - center.x), 2) / PApplet.pow(radiusX, 2)
         + PApplet.pow((y - center.y), 2) / PApplet.pow(radiusY, 2) <= 1);
     }
@@ -106,15 +106,14 @@ public class GrabbableCircle extends AbstractGrabber {
           sWeight++;
         break;
       case CHANGE_POSITION:
-        setPosition(((GenericDOF2Event<?>) event).getX(), 
-        ((GenericDOF2Event<?>) event).getY());
+        setPosition(((GenericDOF2Event<?>) event).x(), 
+        ((GenericDOF2Event<?>) event).y());
         break;
         case CHANGE_SHAPE:
-        radiusX += ((GenericDOF2Event<?>) event).getDX();
-        radiusY += ((GenericDOF2Event<?>) event).getDY();
+        radiusX += ((GenericDOF2Event<?>) event).dx();
+        radiusY += ((GenericDOF2Event<?>) event).dy();
         break;
       }
     }
   }
 }
-

@@ -67,14 +67,14 @@ public class GrabbableCircle extends AbstractGrabber {
     float threshold = 100;
     float x,y,z;
     if (event instanceof GenericDOF2Event) {
-      x = ((GenericDOF2Event<?>)event).getX();
-      y = ((GenericDOF2Event<?>)event).getY();
+      x = ((GenericDOF2Event<?>)event).x();
+      y = ((GenericDOF2Event<?>)event).y();
       return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
     }
     // begin kinect
     if (event instanceof KINECTEvent) {
-      x = ((KINECTEvent)event).getX();
-      y = ((KINECTEvent)event).getY();
+      x = ((KINECTEvent)event).x();
+      y = ((KINECTEvent)event).y();
       z = ((KINECTEvent) event).leftHand().position().z - ((KINECTEvent) event).rightHand().position().z;
       if (z > threshold && (pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1))
         return true;
@@ -101,19 +101,18 @@ public class GrabbableCircle extends AbstractGrabber {
           sWeight++;    
         break;
       case CHANGE_POSITION:
-        setPosition( ((GenericDOF2Event<?>)event).getX(), ((GenericDOF2Event<?>)event).getY() );
+        setPosition( ((GenericDOF2Event<?>)event).x(), ((GenericDOF2Event<?>)event).y() );
         break;
         case CHANGE_SHAPE:
-        radiusX += ((GenericDOF2Event<?>)event).getDX();
-        radiusY += ((GenericDOF2Event<?>)event).getDY();
+        radiusX += ((GenericDOF2Event<?>)event).dx();
+        radiusY += ((GenericDOF2Event<?>)event).dy();
         break;
         case CHANGE_POS_SHAPE:
         radiusX = abs( ((KINECTEvent)event).rightHand().position().x- ((KINECTEvent)event).leftHand().position().x);
         radiusY = abs( ((KINECTEvent)event).rightHand().position().y- ((KINECTEvent)event).leftHand().position().y);        
-        setPosition(((KINECTEvent)event).getX(), ((KINECTEvent)event).getY());           
+        setPosition(((KINECTEvent)event).x(), ((KINECTEvent)event).y());           
         break;
       }
     }
   }
 }
-

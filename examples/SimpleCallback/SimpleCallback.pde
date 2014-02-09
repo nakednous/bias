@@ -70,8 +70,8 @@ public class GrabbableCircle extends AbstractGrabber {
   @Override
   public boolean checkIfGrabsInput(TerseEvent event) {
     if (event instanceof DOF2Event) {
-      float x = ((DOF2Event)event).getX();
-      float y = ((DOF2Event)event).getY();
+      float x = ((DOF2Event)event).x();
+      float y = ((DOF2Event)event).y();
       return(pow((x - center.x), 2) + pow((y - center.y), 2) <= pow(radius, 2));
     }      
     return false;
