@@ -1,15 +1,14 @@
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.agent.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.generic.profile.*;
-import remixlab.tersehandling.event.*;
+import remixlab.bias.core.*;
+import remixlab.bias.agent.*;
+import remixlab.bias.event.*;
+import remixlab.bias.agent.profile.*;
 
 import procontroll.*;
 import net.java.games.input.*;
 
-public class HIDAgent extends GenericMotionAgent<GenericMotionProfile<SpaceAction>, GenericClickProfile<ClickAction>> implements EventConstants {
-  public HIDAgent(TerseHandler h, String n) {
-    super(new GenericMotionProfile<SpaceAction>(), new GenericClickProfile<ClickAction>(), h, n);
+public class HIDAgent extends ActionMotionAgent<MotionProfile<SpaceAction>, ClickProfile<ClickAction>> {
+  public HIDAgent(InputHandler h, String n) {
+    super(new MotionProfile<SpaceAction>(), new ClickProfile<ClickAction>(), h, n);
     //default bindings
     profile().setBinding(SpaceAction.CHANGE_POS_SHAPE);
     disableTracking();
@@ -17,51 +16,51 @@ public class HIDAgent extends GenericMotionAgent<GenericMotionProfile<SpaceActio
   }
 
   @Override
-  public GenericDOF6Event<SpaceAction> feed() {
-    return new GenericDOF6Event<SpaceAction>(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(),
-                                             sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
+  public DOF6Event feed() {
+    return new DOF6Event(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(),
+                         sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
   }
 }
 
-public class MouseAgent extends GenericMotionAgent<GenericMotionProfile<MotionAction>, GenericClickProfile<ClickAction>> implements EventConstants {
-  GenericDOF2Event<MotionAction> event, prevEvent;
-  public MouseAgent(TerseHandler h, String n) {
-    super(new GenericMotionProfile<MotionAction>(), new GenericClickProfile<ClickAction>(), h, n);
+public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, ClickProfile<ClickAction>> {
+  DOF2Event event, prevEvent;
+  public MouseAgent(InputHandler scn, String n) {
+    super(new MotionProfile<MotionAction>(), 
+          new ClickProfile<ClickAction>(), scn, n);
     //default bindings
-    clickProfile().setClickBinding(TH_LEFT, 1, ClickAction.CHANGE_COLOR);
-    clickProfile().setClickBinding(TH_META, TH_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
-    clickProfile().setClickBinding((TH_META | TH_SHIFT), TH_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
-    profile().setBinding(TH_LEFT, MotionAction.CHANGE_POSITION);
-    profile().setBinding(TH_SHIFT, TH_LEFT, MotionAction.CHANGE_SHAPE);
-    profile().setBinding(TH_META, TH_RIGHT, MotionAction.CHANGE_SHAPE);
+    clickProfile().setBinding(LEFT, 1, ClickAction.CHANGE_COLOR);
+    clickProfile().setBinding(DOF2Event.META, RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
+    clickProfile().setBinding((DOF2Event.META | DOF2Event.SHIFT), RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
+    profile().setBinding(LEFT, MotionAction.CHANGE_POSITION);
+    profile().setBinding(DOF2Event.SHIFT, LEFT, MotionAction.CHANGE_SHAPE);
+    profile().setBinding(DOF2Event.META, RIGHT, MotionAction.CHANGE_SHAPE);
   }
- 
+  
   public void mouseEvent(processing.event.MouseEvent e) {      
     if ( e.getAction() == processing.event.MouseEvent.MOVE ) {
-      event = new GenericDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
-      updateGrabber(event);
-      hidAgent.setDefaultGrabber(trackedGrabber());
+      event = new DOF2Event(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
+      updateTrackedGrabber(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.DRAG ) {
-      event = new GenericDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
+      event = new DOF2Event(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
       handle(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.CLICK ) {
-      handle(new GenericClickEvent<ClickAction>(e.getX(), e.getY(), e.getModifiers(), e.getButton(), e.getCount()));
+      handle(new ClickEvent(e.getX(), e.getY(), e.getModifiers(), e.getButton(), e.getCount()));
     }
   }
 }
 
-public class GrabbableCircle extends AbstractGrabber {
+public class Ellipse extends GrabberObject {
   public float radiusX, radiusY;
   public PVector center;
-  public int colour;
+  public color colour;
   public int contourColour;
   public int sWeight;
 
-  public GrabbableCircle(Agent agent) {
+  public Ellipse(Agent agent) {
     agent.addInPool(this);
     setColor();
     setPosition();
@@ -69,7 +68,7 @@ public class GrabbableCircle extends AbstractGrabber {
     contourColour = color(0, 0, 0);
   }
 
-  public GrabbableCircle(Agent agent, PVector c, float r) {
+  public Ellipse(Agent agent, PVector c, float r) {
     agent.addInPool(this);
     radiusX = r;
     radiusY = r;
@@ -79,10 +78,10 @@ public class GrabbableCircle extends AbstractGrabber {
   }
 
   public void setColor() {
-    setColor(color(random(0, 255), random(0, 255), random(0, 255)));
+    setColor(color(random(0, 255), random(0, 255), random(0, 255), random(100, 200)));
   }
 
-  public void setColor(int myC) {
+  public void setColor(color myC) {
     colour = myC;
   }
 
@@ -119,42 +118,36 @@ public class GrabbableCircle extends AbstractGrabber {
   }
 
   @Override
-  public boolean checkIfGrabsInput(TerseEvent event) {
-    if (event instanceof GenericDOF2Event) {
-      float x = ((GenericDOF2Event<?>)event).x();
-      float y = ((GenericDOF2Event<?>)event).y();
+  public boolean checkIfGrabsInput(BogusEvent event) {
+    if (event instanceof DOF2Event) {
+      float x = ((DOF2Event)event).x();
+      float y = ((DOF2Event)event).y();
       return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
     }      
     return false;
   }
 
   @Override
-  public void performInteraction(TerseEvent event) {
-    if (event instanceof Duoable) {
-      switch ((GlobalAction) ((Duoable<?>)event).action().referenceAction()) {
-      case CHANGE_COLOR:
+  public void performInteraction(BogusEvent event) {
+    if (((BogusEvent)event).action() != null) {
+      switch ((GlobalAction) ((BogusEvent)event).action().referenceAction()) {
+        case CHANGE_COLOR:
         contourColour = color(random(100, 255), random(100, 255), random(100, 255));
         break;
       case CHANGE_STROKE_WEIGHT:
-        if (event.isShiftDown()) {					
+        if (event.isShiftDown()) {          
           if (sWeight > 1)
             sWeight--;
         }
-        else			
-          sWeight++;		
+        else      
+          sWeight++;    
         break;
       case CHANGE_POSITION:
-        setPosition( ((GenericDOF2Event<?>)event).x(), ((GenericDOF2Event<?>)event).y() );
+        setPosition( ((DOF2Event)event).x(), ((DOF2Event)event).y() );
         break;
-      case CHANGE_SHAPE:
-        radiusX += ((GenericDOF2Event<?>)event).dx();
-        radiusY += ((GenericDOF2Event<?>)event).dy();
-        break;
-      case CHANGE_POS_SHAPE:
-        radiusX += ((GenericDOF6Event<?>)event).z();
-        radiusY += ((GenericDOF6Event<?>)event).z();
-        center.x += ((GenericDOF6Event<?>)event).x();
-        center.y += ((GenericDOF6Event<?>)event).y();
+        case CHANGE_SHAPE:
+        radiusX += ((DOF2Event)event).dx();
+        radiusY += ((DOF2Event)event).dy();
         break;
       }
     }
@@ -165,8 +158,8 @@ int w = 600;
 int h = 600;
 MouseAgent agent;
 HIDAgent hidAgent;
-TerseHandler terseHandler;
-GrabbableCircle [] circles;
+InputHandler inputHandler;
+Ellipse [] ellipses;
 
 ControllIO controll;
 ControllDevice device; // my SpaceNavigator
@@ -182,24 +175,24 @@ ControllButton button2;
 void setup() {
   size(w, h);
   openSpaceNavigator();
-  terseHandler = new TerseHandler();
-  agent = new MouseAgent(terseHandler, "my_mouse");
+  inputHandler = new InputHandler();
+  agent = new MouseAgent(inputHandler, "my_mouse");
   registerMethod("mouseEvent", agent);
-  hidAgent = new HIDAgent(terseHandler, "SpaceNavigator");
-  circles = new GrabbableCircle[50];
-  for (int i = 0; i < circles.length; i++)
-    circles[i] = new GrabbableCircle(agent);
+  hidAgent = new HIDAgent(inputHandler, "SpaceNavigator");
+  ellipses = new Ellipse[50];
+  for (int i = 0; i < ellipses.length; i++)
+    ellipses[i] = new Ellipse(agent);
 }
 
 void draw() {
   background(255);
-  for (int i = 0; i < circles.length; i++) {
-    if ( circles[i].grabsAgent(agent) )
-      circles[i].draw(color(255, 0, 0));
+  for (int i = 0; i < ellipses.length; i++) {
+    if ( ellipses[i].grabsInput(agent) )
+      ellipses[i].draw(color(255, 0, 0));
     else
-      circles[i].draw();
+      ellipses[i].draw();
   }
-  terseHandler.handle();
+  inputHandler.handle();
 }
 
 void openSpaceNavigator() {

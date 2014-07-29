@@ -1,11 +1,11 @@
-public class GrabbableCircle extends AbstractGrabber {
+public class Ellipse extends GrabberObject {
   public float radiusX, radiusY;
   public PVector center;
   public int colour;
   public int contourColour;
   public int sWeight;
 
-  public GrabbableCircle(Agent agent) {
+  public Ellipse(Agent agent) {
     agent.addInPool(this);
     setColor();
     setPosition();
@@ -13,7 +13,7 @@ public class GrabbableCircle extends AbstractGrabber {
     contourColour = color(0, 0, 0);
   }
 
-  public GrabbableCircle(Agent agent, PVector c, float r) {
+  public Ellipse(Agent agent, PVector c, float r) {
     agent.addInPool(this);
     radiusX = r;
     radiusY = r;
@@ -63,12 +63,12 @@ public class GrabbableCircle extends AbstractGrabber {
   }
 
   @Override
-  public boolean checkIfGrabsInput(TerseEvent event) {
+  public boolean checkIfGrabsInput(BogusEvent event) {
     float threshold = 100;
     float x,y,z;
-    if (event instanceof GenericDOF2Event) {
-      x = ((GenericDOF2Event<?>)event).x();
-      y = ((GenericDOF2Event<?>)event).y();
+    if (event instanceof DOF2Event) {
+      x = ((DOF2Event)event).x();
+      y = ((DOF2Event)event).y();
       return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
     }
     // begin kinect
@@ -86,9 +86,9 @@ public class GrabbableCircle extends AbstractGrabber {
   }
 
   @Override
-    public void performInteraction(TerseEvent event) {
-    if (event instanceof Duoable) {
-      switch ((GlobalAction) ((Duoable<?>)event).action().referenceAction()) {
+    public void performInteraction(BogusEvent event) {
+    if (((BogusEvent)event).action() != null) {
+      switch ((GlobalAction) ((BogusEvent)event).action().referenceAction()) {
         case CHANGE_COLOR:
         contourColour = color(random(100, 255), random(100, 255), random(100, 255));
         break;
@@ -101,11 +101,11 @@ public class GrabbableCircle extends AbstractGrabber {
           sWeight++;    
         break;
       case CHANGE_POSITION:
-        setPosition( ((GenericDOF2Event<?>)event).x(), ((GenericDOF2Event<?>)event).y() );
+        setPosition( ((DOF2Event)event).x(), ((DOF2Event)event).y() );
         break;
         case CHANGE_SHAPE:
-        radiusX += ((GenericDOF2Event<?>)event).dx();
-        radiusY += ((GenericDOF2Event<?>)event).dy();
+        radiusX += ((DOF2Event)event).dx();
+        radiusY += ((DOF2Event)event).dy();
         break;
         case CHANGE_POS_SHAPE:
         radiusX = abs( ((KINECTEvent)event).rightHand().position().x- ((KINECTEvent)event).leftHand().position().x);

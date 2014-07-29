@@ -16,16 +16,19 @@ public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
     profile().setBinding(DOF2Event.SHIFT, LEFT, MotionAction.CHANGE_SHAPE);
     profile().setBinding(DOF2Event.META, RIGHT, MotionAction.CHANGE_SHAPE);
   }
-  
+
   public void mouseEvent(processing.event.MouseEvent e) {      
     if ( e.getAction() == processing.event.MouseEvent.MOVE ) {
-      event = new DOF2Event(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
+      event = new DOF2Event(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
       updateTrackedGrabber(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.DRAG ) {
       event = new DOF2Event(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
-      handle(event);
+      if(event.isControlDown())
+        inputHandler().enqueueEventTuple(new EventGrabberTuple(event, MotionAction.CHANGE_POSITION, ellipses[20]));
+      else
+        handle(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.CLICK ) {

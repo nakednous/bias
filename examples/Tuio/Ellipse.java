@@ -1,12 +1,11 @@
-import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.core.PVector;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.event.GenericDOF2Event;
-import remixlab.tersehandling.generic.profile.Duoable;
-import remixlab.tersehandling.event.TerseEvent;
+import processing.core.*;
 
-public class GrabbableCircle extends AbstractGrabber {
+import remixlab.bias.core.*;
+import remixlab.bias.event.*;
+import remixlab.bias.agent.*;
+import remixlab.bias.agent.profile.*;
+
+public class Ellipse extends GrabberObject {
   public float radiusX, radiusY;
   public PVector center;
   public int colour;
@@ -16,7 +15,7 @@ public class GrabbableCircle extends AbstractGrabber {
   PApplet parent;
   PGraphics canvas;
 
-  public GrabbableCircle(PApplet parent, PGraphics canvas, TerseHandler handler) {
+  public Ellipse(PApplet parent, PGraphics canvas, InputHandler handler) {
     super(handler);
     sWeight = 4;
     this.parent = parent;
@@ -26,7 +25,7 @@ public class GrabbableCircle extends AbstractGrabber {
     setPosition();
   }
 
-  public GrabbableCircle(PApplet parent, PGraphics canvas, TerseHandler handler, PVector c, float r) {
+  public Ellipse(PApplet parent, PGraphics canvas, InputHandler handler, PVector c, float r) {
     super(handler);
     radiusX = r;
     radiusY = r;
@@ -36,7 +35,7 @@ public class GrabbableCircle extends AbstractGrabber {
     setColor();
     sWeight = 4;
   }
-
+  
   public void setColor() {
     setColor(canvas.color(parent.random(0, 255), parent.random(0, 255), parent.random(0, 255)));
   }
@@ -61,8 +60,7 @@ public class GrabbableCircle extends AbstractGrabber {
     float highX = canvas.width - maxRadius;
     float highY = canvas.height - maxRadius;
     float r = parent.random(20, maxRadius);
-    setPositionAndRadii(
-    new PVector(parent.random(low, highX), parent.random(low, highY)), r, r);
+    setPositionAndRadii(new PVector(parent.random(low, highX), parent.random(low, highY)), r, r);
   }
 
   public void draw(PGraphics canvas) {
@@ -77,43 +75,40 @@ public class GrabbableCircle extends AbstractGrabber {
     canvas.ellipse(center.x, center.y, 2 * radiusX, 2 * radiusY);
     canvas.popStyle();
   }
-
+  
   @Override
-  public boolean checkIfGrabsInput(TerseEvent event) {
-    if (event instanceof GenericDOF2Event) {
-      float x = ((GenericDOF2Event<?>) event).x();
-      float y = ((GenericDOF2Event<?>) event).y();
-      return (PApplet.pow((x - center.x), 2) / PApplet.pow(radiusX, 2)
-        + PApplet.pow((y - center.y), 2) / PApplet.pow(radiusY, 2) <= 1);
-    }
+  public boolean checkIfGrabsInput(BogusEvent event) {
+    if (event instanceof DOF2Event) {
+      float x = ((DOF2Event)event).x();
+      float y = ((DOF2Event)event).y();
+      return(PApplet.pow((x - center.x), 2)/PApplet.pow(radiusX, 2) + PApplet.pow((y - center.y), 2)/PApplet.pow(radiusY, 2) <= 1);
+    }      
     return false;
   }
 
   @Override
-  public void performInteraction(TerseEvent event) {
-    if (event instanceof Duoable<?>) {
-      switch ((GlobalAction) ((Duoable<?>) event).action().referenceAction()) {
+  public void performInteraction(BogusEvent event) {
+    if (((BogusEvent)event).action() != null) {
+      switch ((GlobalAction) ((BogusEvent)event).action().referenceAction()) {
         case CHANGE_COLOR:
-        contourColour = canvas.color(parent.random(100, 255), parent.random(100, 255), 
-        parent.random(100, 255));
+        contourColour = canvas.color(parent.random(100, 255), parent.random(100, 255), parent.random(100, 255));
         break;
       case CHANGE_STROKE_WEIGHT:
-        if (event.isShiftDown()) {
+        if (event.isShiftDown()) {          
           if (sWeight > 1)
             sWeight--;
-        } 
-        else
-          sWeight++;
+        }
+        else      
+          sWeight++;    
         break;
       case CHANGE_POSITION:
-        setPosition(((GenericDOF2Event<?>) event).x(), 
-        ((GenericDOF2Event<?>) event).y());
+        setPosition( ((DOF2Event)event).x(), ((DOF2Event)event).y() );
         break;
         case CHANGE_SHAPE:
-        radiusX += ((GenericDOF2Event<?>) event).dx();
-        radiusY += ((GenericDOF2Event<?>) event).dy();
+        radiusX += ((DOF2Event)event).dx();
+        radiusY += ((DOF2Event)event).dy();
         break;
       }
     }
-  }
+  } 
 }

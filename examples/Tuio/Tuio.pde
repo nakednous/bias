@@ -1,11 +1,4 @@
-/**
- * TUIO
- * by Eduardo Moriana and Jean Pierre Charalambos.
- *
- * Doc to come...
- */
-
-import remixlab.tersehandling.core.*;
+import remixlab.bias.core.*;
 import java.util.Vector;
 
 import TUIO.TuioCursor;
@@ -18,33 +11,33 @@ int w = 600;
 int h = 600;
 MOUSEAgent mouseAgent;
 TUIOAgent tuioAgent;
-TerseHandler terseHandler;
-GrabbableCircle [] circles;
+InputHandler inputHandler;
+Ellipse [] ellipses;
 
 TuioProcessing tuioClient;
 
 void setup() {
   size(w, h);
-  terseHandler = new TerseHandler();
-  tuioAgent = new TUIOAgent(terseHandler, "my_tuio", g);
-  mouseAgent = new MOUSEAgent(terseHandler, "my_mouse");
+  inputHandler = new InputHandler();
+  tuioAgent = new TUIOAgent(inputHandler, "my_tuio", g);
+  mouseAgent = new MOUSEAgent(inputHandler, "my_mouse");
   registerMethod("mouseEvent", mouseAgent);
-  circles = new GrabbableCircle[50];
-  for (int i = 0; i < circles.length; i++)
-    circles[i] = new GrabbableCircle(this, g, terseHandler);
+  ellipses = new Ellipse[50];
+  for (int i = 0; i < ellipses.length; i++)
+    ellipses[i] = new Ellipse(this, g, inputHandler);
   tuioClient = new TuioProcessing(this, 3333);
 }
 
 void draw() {
   background(25,75,125);
-  for (int i = 0; i < circles.length; i++) {
-    if ( circles[i].grabsAgent(mouseAgent) )
-      circles[i].draw(color(255, 0, 0), g);
+  for (int i = 0; i < ellipses.length; i++) {
+    if ( ellipses[i].grabsInput(mouseAgent) )
+      ellipses[i].draw(color(255, 0, 0), g);
     else
-      circles[i].draw(g);
+      ellipses[i].draw(g);
   }
   drawTuio();
-  terseHandler.handle();
+  inputHandler.handle();
 }
 
 private void drawTuio() {

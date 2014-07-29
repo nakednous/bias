@@ -1,14 +1,8 @@
-public class KINECTEvent extends GenericDOF3Event<SpaceAction> {
+public class KINECTEvent extends DOF3Event {
   Hand left, right;
   
   public KINECTEvent(KINECTEvent prevEvent, Hand l, Hand r) { 
     super(prevEvent, ((l.position().x+r.position().x)/2), ((l.position().y+r.position().y)/2), 1300-((l.position().z+r.position().z)/2));
-    left = new Hand(l.position());
-    right = new Hand(r.position());
-  }
-  
-  public KINECTEvent(KINECTEvent prevEvent, Hand l, Hand r, SpaceAction action) { 
-    super(prevEvent, ((l.position().x+r.position().x)/2), ((l.position().y+r.position().y)/2), 1300-((l.position().z+r.position().z)/2), action);
     left = new Hand(l.position());
     right = new Hand(r.position());
   }

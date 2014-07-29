@@ -6,7 +6,7 @@
  * Example by Miguel Alejandro Parra [maparrar(at)gmail(dot)com]
  * */
 import SimpleOpenNI.*;
-public class KINECTAgent extends GenericMotionAgent<GenericMotionProfile<SpaceAction>, GenericClickProfile<ClickAction>> implements EventConstants {
+public class KINECTAgent extends ActionMotionAgent<MotionProfile<SpaceAction>, ClickProfile<ClickAction>> {
   KINECTEvent currEvent, prevEvent;
   SimpleOpenNI  context;    //Context for the Kinect handler
   Hand prevLeft,prevRight;  // Previous Hands position
@@ -21,8 +21,8 @@ public class KINECTAgent extends GenericMotionAgent<GenericMotionProfile<SpaceAc
    * Kinect object constructor
    * @param PApplet p PApplet object
    * */
-  public KINECTAgent(PApplet p,TerseHandler h, String n) {
-    super(new GenericMotionProfile<SpaceAction>(), new GenericClickProfile<ClickAction>(), h, n);
+  public KINECTAgent(PApplet p, InputHandler h, String n) {
+    super(new MotionProfile<SpaceAction>(), new ClickProfile<ClickAction>(), h, n);
     //default bindings
     profile().setBinding(SpaceAction.CHANGE_POS_SHAPE);
     //setSensitivities(1, 1, 0.00001, 0.0001, 0.0001, 0.02);
@@ -56,7 +56,7 @@ public class KINECTAgent extends GenericMotionAgent<GenericMotionProfile<SpaceAc
   @Override
   public KINECTEvent feed() {
     currEvent = new KINECTEvent(prevEvent, left, right);
-    updateGrabber(currEvent); 
+    updateTrackedGrabber(currEvent); 
     prevEvent = currEvent.get();                                                          
     return currEvent;             
   }

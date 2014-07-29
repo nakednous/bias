@@ -1,6 +1,6 @@
-import remixlab.tersehandling.generic.profile.*;
+import remixlab.bias.core.*;
 
-public enum SpaceAction implements Actionable<GlobalAction> {
+public enum SpaceAction implements Action<GlobalAction> {
   CHANGE_POS_SHAPE(GlobalAction.CHANGE_POS_SHAPE);
 
   @Override
