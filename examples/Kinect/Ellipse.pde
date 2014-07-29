@@ -107,7 +107,7 @@ public class Ellipse extends GrabberObject {
         radiusX += ((DOF2Event)event).dx();
         radiusY += ((DOF2Event)event).dy();
         break;
-        case CHANGE_POS_SHAPE:
+      case CHANGE_POS_SHAPE:
         radiusX = abs( ((KINECTEvent)event).rightHand().position().x- ((KINECTEvent)event).leftHand().position().x);
         radiusY = abs( ((KINECTEvent)event).rightHand().position().y- ((KINECTEvent)event).leftHand().position().y);        
         setPosition(((KINECTEvent)event).x(), ((KINECTEvent)event).y());           

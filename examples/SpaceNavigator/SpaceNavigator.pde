@@ -18,7 +18,7 @@ public class HIDAgent extends ActionMotionAgent<MotionProfile<SpaceAction>, Clic
   @Override
   public DOF6Event feed() {
     return new DOF6Event(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(),
-                         sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
+                         sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue());
   }
 }
 
@@ -38,8 +38,9 @@ public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
   
   public void mouseEvent(processing.event.MouseEvent e) {      
     if ( e.getAction() == processing.event.MouseEvent.MOVE ) {
-      event = new DOF2Event(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
+      event = new DOF2Event(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());      
       updateTrackedGrabber(event);
+      hidAgent.setDefaultGrabber(trackedGrabber());
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.DRAG ) {
@@ -145,9 +146,15 @@ public class Ellipse extends GrabberObject {
       case CHANGE_POSITION:
         setPosition( ((DOF2Event)event).x(), ((DOF2Event)event).y() );
         break;
-        case CHANGE_SHAPE:
+      case CHANGE_SHAPE:
         radiusX += ((DOF2Event)event).dx();
         radiusY += ((DOF2Event)event).dy();
+        break;
+      case CHANGE_POS_SHAPE:
+        radiusX += ((DOF6Event)event).z();
+        radiusY += ((DOF6Event)event).z();
+        center.x += ((DOF6Event)event).x();
+        center.y += ((DOF6Event)event).y();
         break;
       }
     }
