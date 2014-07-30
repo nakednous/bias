@@ -66,7 +66,7 @@ In this case, to customize the user experience simply bind bogus event [Shortcut
 
 # Installation
 
-Download it [here](https://github.com/remixlab/bias/releases/download/v-1.0.0/bias-1.0.0.zip) and extract it to your sketchbook `libraries` folder.
+Download it [here](https://github.com/nakednous/bias/releases/download/v-1.0.0/bias-1.0.0.zip) and extract it to your sketchbook `libraries` folder.
 
 For detailed Processing third party library installation instructions check [here](http://wiki.processing.org/w/How_to_Install_a_Contributed_Library#Manual_Install).
 
@@ -76,7 +76,7 @@ the [examples](https://github.com/nakednous/bias/tree/master/examples).
 
 # Documentation
 
-* [Wiki](https://github.com/remixlab/bias/wiki) containing a tutorial.
+* [Wiki](https://github.com/nakednous/bias/wiki) containing a tutorial.
 * [API](http://otrolado.info/biasApi) which is also available with the release zip file.
 
 # Author, core developer and maintainer
