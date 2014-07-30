@@ -1,3 +1,10 @@
+/**
+ * TUIO.
+ * by Eduardo Moriana and Jean Pierre Charalambos.
+ * 
+ * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.5.-Tuio
+ */
+
 import remixlab.bias.core.*;
 import java.util.Vector;
 

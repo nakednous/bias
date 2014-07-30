@@ -1,3 +1,10 @@
+/**
+ * Simple Callback.
+ * by Jean Pierre Charalambos.
+ * 
+ * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.1.-SimpleCallback
+ */
+
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 

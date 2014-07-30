@@ -1,9 +1,3 @@
-/**
- * Tersehandling - https://github.com/remixlab/tersehandling
- * National University of Colombia - Remixlab
- * 
- * Hand Class, this class store a point with the position of the hand
- * */
 public class Hand {
   PVector pos;
   color col;

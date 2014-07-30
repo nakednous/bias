@@ -1,3 +1,10 @@
+/**
+ * Event Grabber Tuples.
+ * by Jean Pierre Charalambos.
+ * 
+ * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.3.-EventGrabberTuples
+ */
+
 import remixlab.bias.core.*;
 import remixlab.bias.agent.*;
 import remixlab.bias.event.*;

@@ -1,11 +1,5 @@
-/**
- * Tersehandling - https://github.com/remixlab/tersehandling
- * National University of Colombia - Remixlab
- * @author Jean Pierre Charalambos
- * Class to manage the Kinect functions and the Kinect Agent with Tersehandling
- * Example by Miguel Alejandro Parra [maparrar(at)gmail(dot)com]
- * */
 import SimpleOpenNI.*;
+
 public class KINECTAgent extends ActionMotionAgent<MotionProfile<SpaceAction>, ClickProfile<ClickAction>> {
   KINECTEvent currEvent, prevEvent;
   SimpleOpenNI  context;    //Context for the Kinect handler

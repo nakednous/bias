@@ -1,10 +1,9 @@
 /**
- * Tersehandling - https://github.com/remixlab/tersehandling
- * National University of Colombia - Remixlab
- * @author Jean Pierre Charalambos
- * Class to manage the Kinect functions and the Kinect Agent with Tersehandling
- * Example by Miguel Alejandro Parra [maparrar(at)gmail(dot)com]
- * */
+ * Kinect.
+ * by Miguel Parra and Jean Pierre Charalambos.
+ * 
+ * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.6.-Kinect
+ */
  
 import remixlab.bias.core.*;
 import remixlab.bias.agent.*;
