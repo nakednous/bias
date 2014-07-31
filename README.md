@@ -3,21 +3,21 @@ BIAS
 
 # Introduction
 
-**BIAS**, (**B**)ogus-(**I**)nput (**A**)ction-(**S**)elector package. A package defining an interface between application event input
-data (including but not limited to hardware input) and user-defined actions. The idea being that
-various sorts of input data, mainly that gathered from an user-interaction (e.g., a mouse button being pressed and
-dragged), may be modeled and reduced into high-level events. Those "bogus" events are then taken as input to
-implement user-defined actions on application objects (e.g., push that button or select that geometry on the screen
-and move it close to me).
+**BIAS**, (**B**)ogus-(**I**)nput (**A**)ction-(**S**)elector package. A [Processing](http://processing.org) package
+defining an interface between application event input data (including but not limited to hardware input) and user-defined
+actions. The idea being that various sorts of input data, mainly that gathered from an user-interaction (e.g., a mouse
+button being pressed and dragged), may be modeled and reduced into high-level events. Those "bogus" events are then taken
+as input to implement user-defined actions on application objects (e.g., push that button or select that geometry on the
+screen and move it close to me).
 
-**BIAS** is a full-fledged, stand-alone library which may also provide input handling to any other third party *Java* or *Processing* library.
-It currently represent the event backend of [Proscene-2](http://nakednous.github.io/projects/proscene/).
+**BIAS** has been tested under Linux, Mac OSX and Windows. No special dependencies or requirements needed, apart of course from
+[Processing >= 2.x](https://processing.org/download/).
 
 **BIAS** support is led by the active and great Processing community at its [forum](http://forum.processing.org/two/) where you can reach us.
 
 # Targeted applications
 
-Depending on whether or not the user defines her own set of actions, targeted applications are:
+Depending on whether or not the user defines her own set of actions, **BIAS** targeted applications are:
 
 ## Action-less applications
 
@@ -70,9 +70,10 @@ Download it [here](https://github.com/nakednous/bias/releases/download/v-1.0.0/b
 
 For detailed Processing third party library installation instructions check [here](http://wiki.processing.org/w/How_to_Install_a_Contributed_Library#Manual_Install).
 
-**Note** that **BIAS** is also distributed along side [Proscene-2](http://nakednous.github.io/projects/proscene/) and thus it's incompatible with it.
-If you've already installed [Proscene-2](http://nakednous.github.io/projects/proscene/) you don't need to install **BIAS**, but can just try
-the [examples](https://github.com/nakednous/bias/tree/master/examples).
+**Note** that **BIAS** provides input handling to [Proscene-2](http://nakednous.github.io/projects/proscene/) and is packaged along side with it.
+This *stand-alone* release is thus incompatible with [Proscene-2](http://nakednous.github.io/projects/proscene/). If you've already installed
+[Proscene-2](http://nakednous.github.io/projects/proscene/) you don't need to install **BIAS**, but can just try the [examples](https://github.com/nakednous/bias/tree/master/examples).
+Otherwise, you may uninstall [Proscene-2](http://nakednous.github.io/projects/proscene/) and then install ***BIAS**.
 
 # Documentation
 
