@@ -73,7 +73,7 @@ For detailed Processing third party library installation instructions check [her
 **Note** that **BIAS** provides input handling to [Proscene-2](http://nakednous.github.io/projects/proscene/) and is packaged along side with it.
 This *stand-alone* release is thus incompatible with [Proscene-2](http://nakednous.github.io/projects/proscene/). If you've already installed
 [Proscene-2](http://nakednous.github.io/projects/proscene/) you don't need to install **BIAS**, but can just try the [examples](https://github.com/nakednous/bias/tree/master/examples).
-Otherwise, you may uninstall [Proscene-2](http://nakednous.github.io/projects/proscene/) and then install ***BIAS**.
+Otherwise, you may uninstall [Proscene-2](http://nakednous.github.io/projects/proscene/) first and then install ***BIAS**.
 
 # Documentation
 
