@@ -15,6 +15,21 @@ screen and move it close to me).
 
 **BIAS** support is led by the active and great Processing community at its [forum](http://forum.processing.org/two/) where you can reach us.
 
+# Key features
+
+* *Tested* under Linux, Mac OSX and Windows, and properly works with the JAVA2D, P2D and P3D **Processing** renderers. No special dependencies or requirements needed (apart of course from [Processing-2.x](http://processing.org/ Processing-1.5.1)).
+* It supports all major **Processing** flavours: Desktop, Android and (soon) JS.
+* API design that provides seemless integration with **Processing**, and allows extensibility of its key features.
+* Generic support to [Human Interface Devices (HIDs)](http://en.wikipedia.org/wiki/Human_interface_device), including not only the mouse and the keyboard, but advanced HID's such as a [touchscreen](http://en.wikipedia.org/wiki/Touchscreen), a [space navigator](http://en.wikipedia.org/wiki/3Dconnexion) or a [kinect](http://en.wikipedia.org/wiki/Kinect).
+* User-defined actions, including action sub-sets.
+* Comprehensive set of [bogus events](http://otrolado.info/biasApi/remixlab/bias/core/BogusEvent.html): [KeyboardEvent](http://otrolado.info/biasApi/remixlab/bias/event/KeyboardEvent.html), [ClickEvent](http://otrolado.info/biasApi/remixlab/bias/event/ClickEvent.html) and [MotionEvent](http://otrolado.info/biasApi/remixlab/bias/event/MotionEvent.html).
+* High-level [comprehensive set of agents](http://otrolado.info/biasApi/remixlab/bias/agent/package-summary.html) capable of dealing with bogus events.
+* Keyboard shortcuts and HID bindings customization.
+* Handy set of complete documented [examples](https://github.com/nakednous/bias/wiki) that illustrates the use of the package.
+* A complete [reference documentation](http://otrolado.info/biasApi/).
+* Active support and continuous discussions led by the [Processing community](http://forum.processing.org/two/).
+* Last but not least, released as free software under the terms of the [GPL-v3](http://www.gnu.org/licenses/gpl.html).
+
 # Targeted applications
 
 Depending on whether or not the user defines her own set of actions, **BIAS** targeted applications are:
