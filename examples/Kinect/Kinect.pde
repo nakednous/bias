@@ -1,8 +1,14 @@
 /**
  * Kinect.
  * by Miguel Parra and Jean Pierre Charalambos.
+ *
+ * Notice that this example needs special requirements.
  * 
- * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.6.-Kinect
+ * Documentation (including requirements) found on the online
+ * tutorial: https://github.com/nakednous/bias/wiki/1.6.-Kinect
+ *
+ * Use the mouse (move, drag or click it) to control the ellipses.
+ * Use a Kinect to control the ellipses.
  */
  
 import remixlab.bias.core.*;

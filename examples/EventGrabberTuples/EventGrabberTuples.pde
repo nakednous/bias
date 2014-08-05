@@ -3,6 +3,9 @@
  * by Jean Pierre Charalambos.
  * 
  * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.3.-EventGrabberTuples
+ *
+ * Use the mouse (move, drag or click it) to control the ellipses.
+ * Press the Ctrl key while dragging the mouse to control a specific ellipse.
  */
 
 import remixlab.bias.core.*;

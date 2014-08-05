@@ -3,6 +3,8 @@
  * by Jean Pierre Charalambos.
  * 
  * Documentation found on the online tutorial: https://github.com/nakednous/bias/wiki/1.2.-ActionDrivenCallback
+ *
+ * Use the mouse (move, drag or click it) to control the ellipses.
  */
 
 import remixlab.bias.core.*;
