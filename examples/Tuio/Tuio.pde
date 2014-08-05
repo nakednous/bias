@@ -26,12 +26,12 @@ TuioProcessing tuioClient;
 void setup() {
   size(w, h);
   inputHandler = new InputHandler();
-  tuioAgent = new TUIOAgent(inputHandler, "my_tuio", g);
+  tuioAgent = new TUIOAgent(inputHandler, "my_tuio");
   mouseAgent = new MOUSEAgent(inputHandler, "my_mouse");
   registerMethod("mouseEvent", mouseAgent);
   ellipses = new Ellipse[50];
   for (int i = 0; i < ellipses.length; i++)
-    ellipses[i] = new Ellipse(this, g, inputHandler);
+    ellipses[i] = new Ellipse(inputHandler);
   tuioClient = new TuioProcessing(this, 3333);
 }
 
@@ -39,9 +39,9 @@ void draw() {
   background(25,75,125);
   for (int i = 0; i < ellipses.length; i++) {
     if ( ellipses[i].grabsInput(mouseAgent) )
-      ellipses[i].draw(color(255, 0, 0), g);
+      ellipses[i].draw(color(255, 0, 0));
     else
-      ellipses[i].draw(g);
+      ellipses[i].draw();
   }
   drawTuio();
   inputHandler.handle();

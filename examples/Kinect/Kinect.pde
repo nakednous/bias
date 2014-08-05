@@ -27,7 +27,7 @@ void setup() {
   inputHandler = new InputHandler();
   agent = new MouseAgent(inputHandler, "my_mouse");
   registerMethod("mouseEvent", agent);
-  kinectAgent = new KINECTAgent(this, inputHandler, "Kinect");
+  kinectAgent = new KINECTAgent(inputHandler, "Kinect");
   ellipses = new Ellipse[50];
   for (int i = 0; i < ellipses.length; i++)
     ellipses[i] = new Ellipse(agent);

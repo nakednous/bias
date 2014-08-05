@@ -13,16 +13,15 @@ public class KINECTAgent extends ActionMotionAgent<MotionProfile<SpaceAction>, C
   /****************************************************************************/
   /**
    * Kinect object constructor
-   * @param PApplet p PApplet object
    * */
-  public KINECTAgent(PApplet p, InputHandler h, String n) {
+  public KINECTAgent(InputHandler h, String n) {
     super(new MotionProfile<SpaceAction>(), new ClickProfile<ClickAction>(), h, n);
     //default bindings
     profile().setBinding(SpaceAction.CHANGE_POS_SHAPE);
     //setSensitivities(1, 1, 0.00001, 0.0001, 0.0001, 0.02);
     
     //Kinect init
-    context = new SimpleOpenNI(p);
+    context = new SimpleOpenNI(Kinect.this);
      if (context.isInit() == false){
        println("ERROR PARSING KINECT: Check if the camera is connected.");
      }else{

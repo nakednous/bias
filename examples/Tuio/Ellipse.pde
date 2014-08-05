@@ -12,32 +12,25 @@ public class Ellipse extends GrabberObject {
   public int contourColour;
   public int sWeight;
 
-  PApplet parent;
-  PGraphics canvas;
-
-  public Ellipse(PApplet parent, PGraphics canvas, InputHandler handler) {
+  public Ellipse(InputHandler handler) {
     super(handler);
     sWeight = 4;
-    this.parent = parent;
-    this.canvas = canvas;
-    contourColour = canvas.color(255, 255, 255);
+    contourColour = color(255, 255, 255);
     setColor();
     setPosition();
   }
 
-  public Ellipse(PApplet parent, PGraphics canvas, InputHandler handler, PVector c, float r) {
+  public Ellipse(InputHandler handler, PVector c, float r) {
     super(handler);
     radiusX = r;
     radiusY = r;
-    this.parent = parent;
-    this.canvas = canvas;
     center = c;
     setColor();
     sWeight = 4;
   }
   
   public void setColor() {
-    setColor(canvas.color(parent.random(0, 255), parent.random(0, 255), parent.random(0, 255)));
+    setColor(color(random(0, 255), random(0, 255), random(0, 255)));
   }
 
   public void setColor(int myC) {
@@ -57,23 +50,23 @@ public class Ellipse extends GrabberObject {
   public void setPosition() {
     float maxRadius = 50;
     float low = maxRadius;
-    float highX = canvas.width - maxRadius;
-    float highY = canvas.height - maxRadius;
-    float r = parent.random(20, maxRadius);
-    setPositionAndRadii(new PVector(parent.random(low, highX), parent.random(low, highY)), r, r);
+    float highX = width - maxRadius;
+    float highY = height - maxRadius;
+    float r = random(20, maxRadius);
+    setPositionAndRadii(new PVector(random(low, highX), random(low, highY)), r, r);
   }
 
-  public void draw(PGraphics canvas) {
-    draw(colour, canvas);
+  public void draw() {
+    draw(colour);
   }
 
-  public void draw(int c, PGraphics canvas) {
-    canvas.pushStyle();
-    canvas.stroke(contourColour);
-    canvas.strokeWeight(sWeight);
-    canvas.fill(c);
-    canvas.ellipse(center.x, center.y, 2 * radiusX, 2 * radiusY);
-    canvas.popStyle();
+  public void draw(int c) {
+    pushStyle();
+    stroke(contourColour);
+    strokeWeight(sWeight);
+    fill(c);
+    ellipse(center.x, center.y, 2 * radiusX, 2 * radiusY);
+    popStyle();
   }
   
   @Override
@@ -81,7 +74,7 @@ public class Ellipse extends GrabberObject {
     if (event instanceof DOF2Event) {
       float x = ((DOF2Event)event).x();
       float y = ((DOF2Event)event).y();
-      return(PApplet.pow((x - center.x), 2)/PApplet.pow(radiusX, 2) + PApplet.pow((y - center.y), 2)/PApplet.pow(radiusY, 2) <= 1);
+      return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
     }      
     return false;
   }
@@ -91,7 +84,7 @@ public class Ellipse extends GrabberObject {
     if (((BogusEvent)event).action() != null) {
       switch ((GlobalAction) ((BogusEvent)event).action().referenceAction()) {
         case CHANGE_COLOR:
-        contourColour = canvas.color(parent.random(100, 255), parent.random(100, 255), parent.random(100, 255));
+        contourColour = color(random(100, 255), random(100, 255), random(100, 255));
         break;
       case CHANGE_STROKE_WEIGHT:
         if (event.isShiftDown()) {          

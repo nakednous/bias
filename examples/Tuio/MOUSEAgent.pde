@@ -10,12 +10,12 @@ public class MOUSEAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
   public MOUSEAgent(InputHandler scn, String n) {
     super(new MotionProfile<MotionAction>(), new ClickProfile<ClickAction>(), scn, n);
     //default bindings
-    clickProfile().setBinding(PApplet.LEFT, 1, ClickAction.CHANGE_COLOR);
-    clickProfile().setBinding(DOF2Event.META, PApplet.RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
-    clickProfile().setBinding((DOF2Event.META | DOF2Event.SHIFT), PApplet.RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
-    profile().setBinding(PApplet.LEFT, MotionAction.CHANGE_POSITION);
-    profile().setBinding(DOF2Event.SHIFT, PApplet.LEFT, MotionAction.CHANGE_SHAPE);
-    profile().setBinding(DOF2Event.META, PApplet.RIGHT, MotionAction.CHANGE_SHAPE);
+    clickProfile().setBinding(LEFT, 1, ClickAction.CHANGE_COLOR);
+    clickProfile().setBinding(DOF2Event.META, RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
+    clickProfile().setBinding((DOF2Event.META | DOF2Event.SHIFT), RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
+    profile().setBinding(LEFT, MotionAction.CHANGE_POSITION);
+    profile().setBinding(DOF2Event.SHIFT, LEFT, MotionAction.CHANGE_SHAPE);
+    profile().setBinding(DOF2Event.META, RIGHT, MotionAction.CHANGE_SHAPE);
   }
   
   public void mouseEvent(processing.event.MouseEvent e) {      

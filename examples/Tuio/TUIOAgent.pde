@@ -10,20 +10,18 @@ import remixlab.bias.agent.*;
 import remixlab.bias.agent.profile.*;
 
 public class TUIOAgent extends ActionMotionAgent<MotionProfile<MotionAction>, ClickProfile<ClickAction>> {	
-  PGraphics canvas;
   DOF2Event event, prevEvent;
   Map<Integer, Grabber> grabMap = new HashMap<Integer, Grabber>();
 
-  public TUIOAgent(InputHandler scn, String n, PGraphics canvas) {
+  public TUIOAgent(InputHandler scn, String n) {
     super(new MotionProfile<MotionAction>(), new ClickProfile<ClickAction>(), scn, n);
-    this.canvas = canvas;
     // default bindings
-    clickProfile().setBinding(PApplet.LEFT, 1, ClickAction.CHANGE_COLOR);
-    profile().setBinding(PApplet.LEFT, MotionAction.CHANGE_POSITION);
+    clickProfile().setBinding(LEFT, 1, ClickAction.CHANGE_COLOR);
+    profile().setBinding(LEFT, MotionAction.CHANGE_POSITION);
   }
 
   public void addTuioCursor(TuioCursor tcur) {
-    event = new DOF2Event(prevEvent, tcur.getScreenX(canvas.width), tcur.getScreenY(canvas.height), 0, 0);
+    event = new DOF2Event(prevEvent, tcur.getScreenX(width), tcur.getScreenY(height), 0, 0);
     Grabber grabbable = updateTrackedGrabber(event);
     if (grabbable != null)
       grabMap.put(tcur.getCursorID(), grabbable);
@@ -33,7 +31,7 @@ public class TUIOAgent extends ActionMotionAgent<MotionProfile<MotionAction>, Cl
   public void updateTuioCursor(TuioCursor tcur) {
     Grabber trackedGrabber = grabMap.get(tcur.getCursorID());
     if (trackedGrabber != null) {
-      event = new DOF2Event(prevEvent, tcur.getScreenX(canvas.width), tcur.getScreenY(canvas.height), 0, PApplet.LEFT);
+      event = new DOF2Event(prevEvent, tcur.getScreenX(width), tcur.getScreenY(height), 0, LEFT);
       disableTracking();
       setDefaultGrabber(trackedGrabber);
       handle(event);
