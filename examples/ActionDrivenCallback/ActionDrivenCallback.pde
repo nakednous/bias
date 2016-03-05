@@ -8,20 +8,17 @@
  */
 
 import remixlab.bias.core.*;
-import remixlab.bias.agent.*;
 import remixlab.bias.event.*;
-import remixlab.bias.agent.profile.*;
+import remixlab.bias.ext.*;
 
-int w = 600;
-int h = 600;
 MouseAgent agent;
 InputHandler inputHandler;
 Ellipse [] ellipses;
 
 void setup() {
-  size(w, h);
+  size(800, 800);
   inputHandler = new InputHandler();
-  agent = new MouseAgent(inputHandler, "my_mouse");
+  agent = new MouseAgent(inputHandler);
   registerMethod("mouseEvent", agent);
   ellipses = new Ellipse[50];
   for (int i = 0; i < ellipses.length; i++)

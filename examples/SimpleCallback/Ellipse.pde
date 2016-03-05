@@ -6,7 +6,7 @@ public class Ellipse extends GrabberObject {
   public int sWeight;
 
   public Ellipse(Agent agent) {
-    agent.addInPool(this);
+    agent.addGrabber(this);
     setColor();
     setPosition();
     sWeight = 4;
@@ -14,7 +14,7 @@ public class Ellipse extends GrabberObject {
   }
 
   public Ellipse(Agent agent, PVector c, float r) {
-    agent.addInPool(this);
+    agent.addGrabber(this);
     radiusX = r;
     radiusY = r;
     center = c;    
@@ -43,8 +43,8 @@ public class Ellipse extends GrabberObject {
   public void setPosition() {
     float maxRadius = 50;
     float low = maxRadius;
-    float highX = w - maxRadius;
-    float highY = h - maxRadius;
+    float highX = 800 - maxRadius;
+    float highY = 800 - maxRadius;
     float r = random(20, maxRadius);
     setPositionAndRadii(new PVector(random(low, highX), random(low, highY)), r, r);
   }
@@ -63,18 +63,30 @@ public class Ellipse extends GrabberObject {
   }
 
   @Override
-  public boolean checkIfGrabsInput(BogusEvent event) {
-    if (event instanceof DOF2Event) {
-      float x = ((DOF2Event)event).x();
-      float y = ((DOF2Event)event).y();
-      return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
-    }      
-    return false;
+  public boolean checkIfGrabsInput(DOF2Event event) {
+    float x = event.x();
+    float y = event.y();
+    return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
   }
 
   @Override
-  public void performInteraction(BogusEvent event) {
-    setColor();
-    setPosition();
+  public void performInteraction(ClickEvent event) {
+    if ( event.id() == LEFT )
+      contourColour = color(random(100, 255), random(100, 255), random(100, 255));
+    else if ( event.id() == RIGHT ) {
+      if (sWeight > 1)
+        sWeight--;
+    } else
+      sWeight++;
+  }
+
+  @Override
+  public void performInteraction(DOF2Event event) {
+    if ( event.id() == LEFT )
+      setPosition( event.x(), event.y() );
+    else if ( event.id() == RIGHT ) {
+      radiusX += event.dx();
+      radiusY += event.dy();
+    }
   }
 }

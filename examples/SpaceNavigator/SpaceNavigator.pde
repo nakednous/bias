@@ -12,41 +12,39 @@
  */
 
 import remixlab.bias.core.*;
-import remixlab.bias.agent.*;
 import remixlab.bias.event.*;
-import remixlab.bias.agent.profile.*;
+import remixlab.bias.ext.*;
 
-import procontroll.*;
+import org.gamecontrolplus.*;
 import net.java.games.input.*;
 
-int w = 600;
-int h = 600;
+int SN_ID;// id of the SpaceNavigator gesture
 MouseAgent agent;
 HIDAgent hidAgent;
 InputHandler inputHandler;
 Ellipse [] ellipses;
 
-ControllIO controll;
-ControllDevice device; // my SpaceNavigator
-ControllSlider sliderXpos; // Positions
-ControllSlider sliderYpos;
-ControllSlider sliderZpos;
-ControllSlider sliderXrot; // Rotations
-ControllSlider sliderYrot;
-ControllSlider sliderZrot;
-ControllButton button1; // Buttons
-ControllButton button2;
+ControlIO control;
+ControlDevice device; // my SpaceNavigator
+ControlSlider sliderXpos; // Positions
+ControlSlider sliderYpos;
+ControlSlider sliderZpos;
+ControlSlider sliderXrot; // Rotations
+ControlSlider sliderYrot;
+ControlSlider sliderZrot;
+ControlButton button1; // Buttons
+ControlButton button2;
 
 void setup() {
-  size(w, h);
+  size(800, 800);
   openSpaceNavigator();
   inputHandler = new InputHandler();
-  agent = new MouseAgent(inputHandler, "my_mouse");
+  agent = new MouseAgent(inputHandler);
   registerMethod("mouseEvent", agent);
-  hidAgent = new HIDAgent(inputHandler, "SpaceNavigator");
+  hidAgent = new HIDAgent(inputHandler);
   ellipses = new Ellipse[50];
   for (int i = 0; i < ellipses.length; i++)
-    ellipses[i] = new Ellipse(agent);
+    ellipses[i] = new Ellipse(inputHandler);
 }
 
 void draw() {
@@ -62,19 +60,23 @@ void draw() {
 
 void openSpaceNavigator() {
   println(System.getProperty("os.name"));
-  controll = ControllIO.getInstance(this);  
+  control = ControlIO.getInstance(this);  
   String os = System.getProperty("os.name").toLowerCase();  
   if (os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0)
-    device = controll.getDevice("3Dconnexion SpaceNavigator");// magic name for linux    
+    device = control.getDevice("3Dconnexion SpaceNavigator");// magic name for linux    
   else
-    device = controll.getDevice("SpaceNavigator");//magic name, for windows
-  device.setTolerance(5.00f);
-  sliderXpos = device.getSlider(2);
+    device = control.getDevice("SpaceNavigator");//magic name, for windows
+  if (device == null) {
+    println("No suitable device configured");
+    System.exit(-1); // End the program NOW!
+  }
+  //device.setTolerance(5.00f);
+  sliderXpos = device.getSlider(0);
   sliderYpos = device.getSlider(1);
-  sliderZpos = device.getSlider(0);
-  sliderXrot = device.getSlider(5);
+  sliderZpos = device.getSlider(2);
+  sliderXrot = device.getSlider(3);
   sliderYrot = device.getSlider(4);
-  sliderZrot = device.getSlider(3);
-  button1 = device.getButton(0);
-  button2 = device.getButton(1);
+  sliderZrot = device.getSlider(5);
+  //button1 = device.getButton(0);
+  //button2 = device.getButton(1);
 }

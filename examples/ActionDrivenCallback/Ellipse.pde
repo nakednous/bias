@@ -4,9 +4,15 @@ public class Ellipse extends GrabberObject {
   public color colour;
   public int contourColour;
   public int sWeight;
+  protected Profile profile;
 
   public Ellipse(Agent agent) {
-    agent.addInPool(this);
+    setProfile(new Profile(this));
+    agent.addGrabber(this);
+    profile.setBinding(new MotionShortcut(LEFT), "setPosition");
+    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
+    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
+    
     setColor();
     setPosition();
     sWeight = 4;
@@ -14,24 +20,44 @@ public class Ellipse extends GrabberObject {
   }
 
   public Ellipse(Agent agent, PVector c, float r) {
-    agent.addInPool(this);
+    setProfile(new Profile(this));
+    profile().setBinding(new MotionShortcut(LEFT), "setPosition");
+    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
+    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
+    agent.addGrabber(this);
     radiusX = r;
     radiusY = r;
     center = c;    
     setColor();
     sWeight = 4;
   }
+  
+  public Profile profile() {
+    return profile;
+  }
 
-  public void setColor() {
-    setColor(color(random(0, 255), random(0, 255), random(0, 255), random(100, 200)));
+  public void setProfile(Profile p) {
+    if (p.grabber() == this)
+      profile = p;
+    else
+      System.out.println("Nothing done, profile grabber is different than this grabber");
   }
 
   public void setColor(color myC) {
     colour = myC;
   }
-
-  public void setPosition(float x, float y) {
-    setPositionAndRadii(new PVector(x, y), radiusX, radiusY);
+  
+  public void setColor() {
+    setColor(color(random(0, 255), random(0, 255), random(0, 255), random(100, 200)));
+  }
+  
+  public void setPosition(DOF2Event event) {
+    setPositionAndRadii(new PVector(event.x(), event.y()), radiusX, radiusY);
+  }
+  
+  public void setShape(DOF2Event event) {
+    radiusX += event.dx();
+    radiusY += event.dy();
   }
 
   public void setPositionAndRadii(PVector p, float rx, float ry) {
@@ -43,8 +69,8 @@ public class Ellipse extends GrabberObject {
   public void setPosition() {
     float maxRadius = 50;
     float low = maxRadius;
-    float highX = w - maxRadius;
-    float highY = h - maxRadius;
+    float highX = 800 - maxRadius;
+    float highY = 800 - maxRadius;
     float r = random(20, maxRadius);
     setPositionAndRadii(new PVector(random(low, highX), random(low, highY)), r, r);
   }
@@ -63,38 +89,14 @@ public class Ellipse extends GrabberObject {
   }
 
   @Override
-  public boolean checkIfGrabsInput(BogusEvent event) {
-    if (event instanceof DOF2Event) {
-      float x = ((DOF2Event)event).x();
-      float y = ((DOF2Event)event).y();
-      return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
-    }      
-    return false;
+  public boolean checkIfGrabsInput(DOF2Event event) {
+    float x = event.x();
+    float y = event.y();
+    return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
   }
-
+  
   @Override
   public void performInteraction(BogusEvent event) {
-    if (((BogusEvent)event).action() != null) {
-      switch ((GlobalAction) ((BogusEvent)event).action().referenceAction()) {
-        case CHANGE_COLOR:
-        contourColour = color(random(100, 255), random(100, 255), random(100, 255));
-        break;
-      case CHANGE_STROKE_WEIGHT:
-        if (event.isShiftDown()) {          
-          if (sWeight > 1)
-            sWeight--;
-        }
-        else      
-          sWeight++;    
-        break;
-      case CHANGE_POSITION:
-        setPosition( ((DOF2Event)event).x(), ((DOF2Event)event).y() );
-        break;
-        case CHANGE_SHAPE:
-        radiusX += ((DOF2Event)event).dx();
-        radiusY += ((DOF2Event)event).dy();
-        break;
-      }
-    }
+    profile().handle(event);
   }
 }
