@@ -22,7 +22,7 @@ void setup() {
   registerMethod("mouseEvent", agent);
   ellipses = new Ellipse[50];
   for (int i = 0; i < ellipses.length; i++)
-    ellipses[i] = new Ellipse(agent);
+    ellipses[i] = new Ellipse(inputHandler);
 }
 
 void draw() {
@@ -34,4 +34,16 @@ void draw() {
       ellipses[i].draw();
   }
   inputHandler.handle();
+}
+
+void keyPressed() {
+  if (key == ' ') {
+    agent.click2Pick = !agent.click2Pick;
+    agent.resetTrackedGrabber();
+    for (int i = 0; i < ellipses.length; i++)
+      if (agent.click2Pick)
+        ellipses[i].setMouseMoveBindings();
+      else
+        ellipses[i].setMouseDragBindings();
+  }
 }

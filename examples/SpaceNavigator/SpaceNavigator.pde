@@ -58,6 +58,20 @@ void draw() {
   inputHandler.handle();
 }
 
+void keyPressed() {
+  if (key == ' ') {
+    agent.click2Pick = !agent.click2Pick;
+    agent.resetTrackedGrabber();
+    for (int i = 0; i < ellipses.length; i++) {
+      if (agent.click2Pick)
+        ellipses[i].setMouseMoveBindings();
+      else
+        ellipses[i].setMouseDragBindings();
+      ellipses[i].setSpaceNavigatorBindings();
+    }
+  }
+}
+
 void openSpaceNavigator() {
   println(System.getProperty("os.name"));
   control = ControlIO.getInstance(this);  

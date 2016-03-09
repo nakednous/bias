@@ -64,15 +64,22 @@ public class Ellipse extends GrabberObject {
 
   @Override
   public boolean checkIfGrabsInput(DOF2Event event) {
-    float x = event.x();
-    float y = event.y();
+    return checkIfGrabsInput(event.x(), event.y());
+  }
+  
+  @Override
+  public boolean checkIfGrabsInput(ClickEvent event) {
+    return checkIfGrabsInput(event.x(), event.y());
+  }
+  
+  public boolean checkIfGrabsInput(float x, float y) {
     return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
   }
 
   @Override
   public void performInteraction(ClickEvent event) {
     if ( event.id() == LEFT )
-      contourColour = color(random(100, 255), random(100, 255), random(100, 255));
+      setColor();
     else if ( event.id() == RIGHT ) {
       if (sWeight > 1)
         sWeight--;
@@ -83,7 +90,7 @@ public class Ellipse extends GrabberObject {
   @Override
   public void performInteraction(DOF2Event event) {
     if ( event.id() == LEFT )
-      setPosition( event.x(), event.y() );
+      setPosition();
     else if ( event.id() == RIGHT ) {
       radiusX += event.dx();
       radiusY += event.dy();

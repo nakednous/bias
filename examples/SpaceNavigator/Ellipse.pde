@@ -9,10 +9,8 @@ public class Ellipse extends GrabberObject {
   public Ellipse(InputHandler handler) {
     super(handler);
     setProfile(new Profile(this));
-    profile().setBinding(new MotionShortcut(SN_ID), "setPositionShape");
-    profile.setBinding(new MotionShortcut(LEFT), "setPosition");
-    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
-    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
+    setMouseDragBindings();
+    setSpaceNavigatorBindings();
     setColor();
     setPosition();
     sWeight = 4;
@@ -22,16 +20,30 @@ public class Ellipse extends GrabberObject {
   public Ellipse(InputHandler handler, PVector c, float r) {
     super(handler);
     setProfile(new Profile(this));
-    profile().setBinding(new MotionShortcut(SN_ID), "setPositionShape");
-    profile().setBinding(new MotionShortcut(LEFT), "setPosition");
-    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
-    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
-    agent.addGrabber(this);
+    setMouseDragBindings();
+    setSpaceNavigatorBindings();
     radiusX = r;
     radiusY = r;
     center = c;    
     setColor();
     sWeight = 4;
+  }
+  
+  public void setSpaceNavigatorBindings() {
+    profile().setBinding(new MotionShortcut(SN_ID), "setPositionShape");
+  }
+  
+  public void setMouseDragBindings() {
+    profile().removeBindings();
+    profile().setBinding(new MotionShortcut(LEFT), "setPosition");
+    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
+    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
+  }
+  
+  public void setMouseMoveBindings() {
+    profile().removeBindings();
+    profile().setBinding(new MotionShortcut(NO_BUTTON), "setPosition");
+    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
   }
   
   public Profile profile() {
@@ -68,7 +80,7 @@ public class Ellipse extends GrabberObject {
     center.x += event.dx();
     center.y += event.dy();
   }
-  
+
   public void setPositionAndRadii(PVector p, float rx, float ry) {
     center = p;
     radiusX = rx;
@@ -99,8 +111,15 @@ public class Ellipse extends GrabberObject {
 
   @Override
   public boolean checkIfGrabsInput(DOF2Event event) {
-    float x = event.x();
-    float y = event.y();
+    return checkIfGrabsInput(event.x(), event.y());
+  }
+  
+  @Override
+  public boolean checkIfGrabsInput(ClickEvent event) {
+    return checkIfGrabsInput(event.x(), event.y());
+  }
+  
+  public boolean checkIfGrabsInput(float x, float y) {
     return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
   }
   

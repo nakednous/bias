@@ -6,30 +6,38 @@ public class Ellipse extends GrabberObject {
   public int sWeight;
   protected Profile profile;
 
-  public Ellipse(Agent agent) {
+  public Ellipse(InputHandler handler) {
+    super(handler);
     setProfile(new Profile(this));
-    agent.addGrabber(this);
-    profile.setBinding(new MotionShortcut(LEFT), "setPosition");
-    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
-    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
-    
+    setMouseDragBindings();
     setColor();
     setPosition();
     sWeight = 4;
     contourColour = color(0, 0, 0);
   }
 
-  public Ellipse(Agent agent, PVector c, float r) {
+  public Ellipse(InputHandler handler, PVector c, float r) {
+    super(handler);
     setProfile(new Profile(this));
-    profile().setBinding(new MotionShortcut(LEFT), "setPosition");
-    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
-    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
-    agent.addGrabber(this);
+    setMouseDragBindings();
     radiusX = r;
     radiusY = r;
     center = c;    
     setColor();
     sWeight = 4;
+  }
+  
+  public void setMouseDragBindings() {
+    profile().removeBindings();
+    profile().setBinding(new MotionShortcut(LEFT), "setPosition");
+    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
+    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
+  }
+  
+  public void setMouseMoveBindings() {
+    profile().removeBindings();
+    profile().setBinding(new MotionShortcut(NO_BUTTON), "setPosition");
+    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
   }
   
   public Profile profile() {
@@ -90,8 +98,15 @@ public class Ellipse extends GrabberObject {
 
   @Override
   public boolean checkIfGrabsInput(DOF2Event event) {
-    float x = event.x();
-    float y = event.y();
+    return checkIfGrabsInput(event.x(), event.y());
+  }
+  
+  @Override
+  public boolean checkIfGrabsInput(ClickEvent event) {
+    return checkIfGrabsInput(event.x(), event.y());
+  }
+  
+  public boolean checkIfGrabsInput(float x, float y) {
     return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
   }
   
