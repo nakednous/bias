@@ -11,8 +11,6 @@
 package remixlab.bias.ext;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,7 +18,6 @@ import java.util.Map.Entry;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.util.*;
 
 /**
  * A {@link remixlab.bias.core.Grabber} extension which allows to define
@@ -63,28 +60,9 @@ public class Profile {
     }
   }
 
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(map).toHashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null)
-      return false;
-    if (obj == this)
-      return true;
-    if (obj.getClass() != getClass())
-      return false;
-
-    Profile other = (Profile) obj;
-    return new EqualsBuilder().append(map, other.map).isEquals();
-  }
-
-  protected static HashMap<Integer, AgentDOFTuple> motionMap = new HashMap<Integer, AgentDOFTuple>();
-  protected static HashMap<Integer, Class<?>> clickMap = new HashMap<Integer, Class<?>>();
   protected HashMap<Shortcut, ObjectMethodTuple> map;
   protected Grabber grabber;
+  public static Object context = null;
 
   /**
    * Attaches a profile to the given grabber.
@@ -92,136 +70,6 @@ public class Profile {
   public Profile(Grabber g) {
     map = new HashMap<Shortcut, ObjectMethodTuple>();
     grabber = g;
-  }
-
-  /**
-   * Registers a {@link remixlab.bias.event.MotionEvent#id()} to the Profile.
-   * 
-   * @see #registerMotionID(Class, int)
-   * 
-   * @param id
-   *          the intended {@link remixlab.bias.event.MotionEvent#id()} to be registered.
-   * @param agent
-   *          the agent Class to which the id should belong.
-   * @param dof
-   *          Motion id degrees-of-freedom. Either 1,2,3, or 6.
-   * @return the id or an exception if the id exists.
-   */
-  public static int registerMotionID(int id, Class<?> agent, int dof) {
-    if (motionMap.containsKey(id)) {
-      if (!motionIDs(agent, dof).contains(id))
-        System.out.println("Nothing done! id already present in Profile. Use an id different than: "
-            + (new ArrayList<Integer>(motionMap.keySet())).toString());
-    } else if (dof == 1 || dof == 2 || dof == 3 || dof == 6)
-      motionMap.put(id, new AgentDOFTuple(agent, dof));
-    else
-      System.out.println("Nothing done! dofs in Profile.registerMotionID should be either 1, 2, 3 or 6.");
-    return id;
-  }
-
-  /**
-   * Registers a {@link remixlab.bias.event.MotionEvent#id()} to the Profile.
-   * 
-   * @see #registerMotionID(int, Class, int)
-   * 
-   * @param agent
-   *          the agent Class to which the id should belong.
-   * @param dof
-   *          Motion id degrees-of-freedom. Either 1,2,3, or 6.
-   * @return the id.
-   */
-  public static int registerMotionID(Class<?> agent, int dof) {
-    int key = 0;
-    if (dof != 1 && dof != 2 && dof != 3 && dof != 6)
-      System.out.println("Warning: Nothing done! dofs in Profile.registerMotionID should be either 1, 2, 3 or 6.");
-    else {
-      ArrayList<Integer> ids = new ArrayList<Integer>(motionMap.keySet());
-      if (ids.size() > 0)
-        key = Collections.max(ids) + 1;
-      motionMap.put(key, new AgentDOFTuple(agent, dof));
-    }
-    return key;
-  }
-
-  /**
-   * Registers a {@link remixlab.bias.event.ClickEvent#id()} to the Profile.
-   * 
-   * @param id
-   *          Click id.
-   * @param agent
-   *          the agent Class to which the id should belong.
-   * @return the id
-   * 
-   * @see #registerClickID(Class)
-   */
-  public static int registerClickID(int id, Class<?> agent) {
-    if (clickMap.containsKey(id)) {
-      if (!clickIDs(agent).contains(id))
-        System.out.println("Nothing done! id already present in Profile. Use an id different than: "
-            + (new ArrayList<Integer>(clickMap.keySet())).toString());
-    } else
-      clickMap.put(id, agent);
-    return id;
-  }
-
-  /**
-   * Registers a {@link remixlab.bias.event.ClickEvent#id()} to the Profile.
-   * 
-   * @param agent
-   *          the agent Class to which the id should belong.
-   * @return the id
-   * 
-   * @see #registerClickID(int, Class)
-   */
-  public static int registerClickID(Class<?> agent) {
-    int key = 1;
-    ArrayList<Integer> ids = new ArrayList<Integer>(motionMap.keySet());
-    if (ids.size() > 0)
-      key = Collections.max(ids) + 1;
-    clickMap.put(key, agent);
-    return key;
-  }
-
-  /**
-   * Internal use. Mainly used by {@link #removeBindings(Agent, Class)}.
-   */
-  protected static ArrayList<Integer> motionIDs(Class<?> agent) {
-    ArrayList<Integer> result = new ArrayList<Integer>();
-    Iterator<Entry<Integer, AgentDOFTuple>> it = motionMap.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<Integer, AgentDOFTuple> pair = it.next();
-      if (agent == pair.getValue().agent)
-        result.add(pair.getKey());
-    }
-    return result;
-  }
-
-  /**
-   * Not in used currently. Provided for completeness.
-   */
-  protected static ArrayList<Integer> motionIDs(Class<?> agent, int dofs) {
-    ArrayList<Integer> result = new ArrayList<Integer>();
-    Iterator<Entry<Integer, AgentDOFTuple>> it = motionMap.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<Integer, AgentDOFTuple> pair = it.next();
-      if (agent == pair.getValue().agent && dofs == pair.getValue().dofs)
-        result.add(pair.getKey());
-    }
-    return result;
-  }
-
-  /**
-   * Internal use. Mainly used by {@link #removeBindings(Agent, Class)}.
-   */
-  protected static ArrayList<Integer> clickIDs(Class<?> agent) {
-    ArrayList<Integer> result = new ArrayList<Integer>();
-    Iterator<Entry<Integer, Class<?>>> it = clickMap.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<Integer, Class<?>> pair = it.next();
-      if (agent == pair.getValue())
-        result.add(pair.getKey());
-    }
-    return result;
   }
 
   /**
@@ -288,35 +136,6 @@ public class Profile {
   }
 
   /**
-   * Internal macro. Sort of a shortcut to event reverse mapping. Override this method if
-   * you intend to implement your own event class.
-   */
-  protected Class<?> cls(Shortcut key) {
-    Class<?> eventClass = BogusEvent.class;
-    if (key instanceof KeyboardShortcut)
-      eventClass = KeyboardEvent.class;
-    else if (key instanceof ClickShortcut)
-      eventClass = ClickEvent.class;
-    else if (key instanceof MotionShortcut) {
-      switch (motionMap.get(key.id()).dofs) {
-      case 1:
-        eventClass = DOF1Event.class;
-        break;
-      case 2:
-        eventClass = DOF2Event.class;
-        break;
-      case 3:
-        eventClass = DOF3Event.class;
-        break;
-      case 6:
-        eventClass = DOF6Event.class;
-        break;
-      }
-    }
-    return eventClass;
-  }
-
-  /**
    * Main class method to be called from
    * {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)}. Calls an action
    * handler if the {@link remixlab.bias.core.BogusEvent#shortcut()} is bound.
@@ -376,15 +195,23 @@ public class Profile {
   /**
    * Defines the shortcut that triggers the given action.
    * <p>
-   * The action is a method implemented by the {@link #grabber()} that returns void and
-   * may have a {@link remixlab.bias.core.BogusEvent} parameter, or no parameters at all.
-   * A {@link remixlab.bias.event.MotionEvent} or a <b>DOFnEvent()</b> that matches the
-   * {@link remixlab.bias.core.Shortcut#id()} dofs may be passed to the action when
-   * binding a {@link remixlab.bias.event.MotionShortcut}. A
-   * {@link remixlab.bias.event.KeyboardEvent} and a
-   * {@link remixlab.bias.event.ClickEvent} should always be passed to the action when
-   * binding a {@link remixlab.bias.event.KeyboardShortcut} and a
-   * {@link remixlab.bias.event.ClickShortcut}, respectively.
+   * The action may be:
+   * <ol>
+   * <li>A method implemented in the {@link #context} that returns void and has a
+   * {@link #grabber()} parameter and, optionally, a {@link remixlab.bias.core.BogusEvent}
+   * parameter, or no parameters at all. A {@link remixlab.bias.event.MotionEvent} or a
+   * <b>DOFnEvent()</b> that matches the {@link remixlab.bias.core.Shortcut#eventClass()}
+   * may be passed to the action when binding a
+   * {@link remixlab.bias.event.MotionShortcut}.</li>
+   * <li>A method implemented by the {@link #grabber()} that returns void and may have a
+   * {@link remixlab.bias.core.BogusEvent} parameter, or no parameters at all. A
+   * {@link remixlab.bias.event.MotionEvent} or a <b>DOFnEvent()</b> that matches the
+   * {@link remixlab.bias.core.Shortcut#eventClass()} may be passed to the action when
+   * binding a {@link remixlab.bias.event.MotionShortcut}.</li>
+   * </ol>
+   * The algorithm searches the action in the above order. It will only search the action
+   * in the {@link #grabber()} if nothing is found at the {@link #context}, i.e., the
+   * {@link #context} takes higher precedence over the {@link #grabber()}.
    * 
    * @param key
    *          {@link remixlab.bias.core.Shortcut}
@@ -393,41 +220,49 @@ public class Profile {
    * 
    * @see #setBinding(Object, Shortcut, String)
    */
-  public void setBinding(Shortcut key, String action) {
+  public boolean setBinding(Shortcut key, String action) {
     if (printWarning(key, action))
-      return;
+      return false;
+    String message1 = null;
     Method method = null;
-    String message = "Check that the " + grabber().getClass().getSimpleName() + "." + action
-        + " method exists, is public and returns void, and that it takes no parameters or a "
-        + ((key instanceof MotionShortcut) ? cls(key).getSimpleName() + " or MotionEvent" : cls(key).getSimpleName())
+    if (context != null && context != grabber) {
+      try {
+        method = method(context, key, action);
+      } catch (Exception e) {
+        message1 = message(context, key, action);
+      }
+      if (method != null) {
+        map.put(key, new ObjectMethodTuple(context, method));
+        return true;
+      }
+    }
+    String message2 = grabber().getClass().getSimpleName() + "." + action
+        + " exists, is public and returns void, and that it takes no parameters or a "
+        + ((key instanceof MotionShortcut) ? key.eventClass().getSimpleName() + " or MotionEvent"
+            : key.eventClass().getSimpleName())
         + " parameter";
     try {
-      method = grabber.getClass().getMethod(action, new Class<?>[] { cls(key) });
+      method = grabber.getClass().getMethod(action, new Class<?>[] { key.eventClass() });
     } catch (Exception clazz) {
-      boolean print = true;
       try {
         method = grabber.getClass().getMethod(action, new Class<?>[] {});
-        print = false;
       } catch (Exception empty) {
         if (key instanceof MotionShortcut)
           try {
             method = grabber.getClass().getMethod(action, new Class<?>[] { MotionEvent.class });
-            print = false;
           } catch (Exception motion) {
-            System.out.println(message);
+            System.out.println("Warning: not binding set! Check that the "
+                + (message1 != null ? message1 + ". Also check that the " + message2 : message2));
+            clazz.printStackTrace();
             motion.printStackTrace();
           }
-        else {
-          System.out.println(message);
-          empty.printStackTrace();
-        }
-      }
-      if (print) {
-        System.out.println(message);
-        clazz.printStackTrace();
       }
     }
-    map.put(key, new ObjectMethodTuple(grabber, method));
+    if (method != null) {
+      map.put(key, new ObjectMethodTuple(grabber, method));
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -436,12 +271,8 @@ public class Profile {
    * The action is a method implemented by the {@code object} that returns void and may
    * have a {@link remixlab.bias.core.BogusEvent} parameter, or no parameters at all. A
    * {@link remixlab.bias.event.MotionEvent} or a <b>DOFnEvent()</b> that matches the
-   * {@link remixlab.bias.core.Shortcut#id()} dofs may be passed to the action when
-   * binding a {@link remixlab.bias.event.MotionShortcut}. A
-   * {@link remixlab.bias.event.KeyboardEvent} and a
-   * {@link remixlab.bias.event.ClickEvent} should always be passed to the action when
-   * binding a {@link remixlab.bias.event.KeyboardShortcut} and a
-   * {@link remixlab.bias.event.ClickShortcut}, respectively.
+   * {@link remixlab.bias.core.Shortcut#eventClass()} may be passed to the action when
+   * binding a {@link remixlab.bias.event.MotionShortcut}.
    * 
    * @param object
    *          {@link java.lang.Object}
@@ -452,42 +283,60 @@ public class Profile {
    * 
    * @see #setBinding(Object, Shortcut, String)
    */
-  public void setBinding(Object object, Shortcut key, String action) {
+  public boolean setBinding(Object object, Shortcut key, String action) {
     if (printWarning(key, action))
-      return;
+      return false;
     Method method = null;
-    String message = "Check that the " + object.getClass().getSimpleName() + "." + action
-        + " method exists, is public and returns void, and that it takes a " + grabber().getClass().getSimpleName()
-        + " parameter and, optionally, a "
-        + ((key instanceof MotionShortcut) ? cls(key).getSimpleName() + " or MotionEvent" : cls(key).getSimpleName())
-        + " parameter";
     try {
-      method = object.getClass().getMethod(action, new Class<?>[] { grabber.getClass(), cls(key) });
+      method = method(object, key, action);
+    } catch (Exception e) {
+      System.out.println("Warning: not binding set! Check that the " + message(object, key, action));
+      e.printStackTrace();
+    }
+    if (method != null) {
+      map.put(key, new ObjectMethodTuple(object, method));
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Internal use.
+   * 
+   * @see #setBinding(Shortcut, String)
+   * @see #setBinding(Object, Shortcut, String)
+   */
+  protected String message(Object object, Shortcut key, String action) {
+    String message = null;
+    if (object != null)
+      message = object.getClass().getSimpleName() + "." + action
+          + " method exists, is public and returns void, and that it takes a " + grabber().getClass().getSimpleName()
+          + " parameter and, optionally, a " + ((key instanceof MotionShortcut)
+              ? key.eventClass().getSimpleName() + " or MotionEvent" : key.eventClass().getSimpleName())
+          + " parameter.";
+    return message;
+  }
+
+  /**
+   * Internal use.
+   * 
+   * @see #setBinding(Shortcut, String)
+   * @see #setBinding(Object, Shortcut, String)
+   */
+  protected Method method(Object object, Shortcut key, String action) throws NoSuchMethodException, SecurityException {
+    Method method = null;
+    try {
+      method = object.getClass().getMethod(action, new Class<?>[] { grabber.getClass(), key.eventClass() });
     } catch (Exception clazz) {
-      boolean print = true;
       try {
         method = object.getClass().getMethod(action, new Class<?>[] { grabber.getClass() });
-        print = false;
       } catch (Exception empty) {
+        // Take into account that at the end this is the only exception to be thrown!
         if (key instanceof MotionShortcut)
-          try {
-            method = object.getClass().getMethod(action, new Class<?>[] { grabber.getClass(), MotionEvent.class });
-            print = false;
-          } catch (Exception motion) {
-            System.out.println(message);
-            motion.printStackTrace();
-          }
-        else {
-          System.out.println(message);
-          empty.printStackTrace();
-        }
-      }
-      if (print) {
-        System.out.println(message);
-        clazz.printStackTrace();
+          method = object.getClass().getMethod(action, new Class<?>[] { grabber.getClass(), MotionEvent.class });
       }
     }
-    map.put(key, new ObjectMethodTuple(object, method));
+    return method;
   }
 
   /**
@@ -505,29 +354,6 @@ public class Profile {
    */
   public void removeBindings() {
     map.clear();
-  }
-
-  /**
-   * Removes all the {@code shortcut} bindings related to the {@code agent}. Same as
-   * {@code removeBindings(shortcut)} when {@code shortcut} is instance of
-   * {@link remixlab.bias.event.KeyboardShortcut} (keyboard shortcuts are global, i.e.,
-   * not related to a specific agent).
-   */
-  public void removeBindings(Agent agent, Class<?> shortcut) {
-    if (shortcut == KeyboardShortcut.class) {
-      removeBindings(shortcut);
-      return;
-    }
-    ArrayList<Integer> IDs = shortcut == MotionShortcut.class ? motionIDs(agent.getClass())
-        : clickIDs(agent.getClass());
-    Iterator<Entry<Shortcut, ObjectMethodTuple>> it = map.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<Shortcut, ObjectMethodTuple> pair = it.next();
-      if (shortcut.isInstance(pair.getKey()))
-        for (int id : IDs)
-          if (id == pair.getKey().id())
-            it.remove();
-    }
   }
 
   /**
