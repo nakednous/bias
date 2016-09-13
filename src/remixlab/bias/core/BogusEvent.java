@@ -48,7 +48,7 @@ public class BogusEvent implements Copyable {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(modifiers).append(id).append(timestamp).toHashCode();
+    return new HashCodeBuilder(17, 37).append(modifiers).append(id).toHashCode();
   }
 
   @Override
@@ -61,8 +61,7 @@ public class BogusEvent implements Copyable {
       return false;
 
     BogusEvent other = (BogusEvent) obj;
-    return new EqualsBuilder().append(modifiers, other.modifiers).append(id, other.id)
-        .append(timestamp, other.timestamp).isEquals();
+    return new EqualsBuilder().append(modifiers, other.modifiers).append(id, other.id).isEquals();
   }
 
   protected final int modifiers;
@@ -91,7 +90,7 @@ public class BogusEvent implements Copyable {
   protected BogusEvent(BogusEvent other) {
     this.modifiers = other.modifiers;
     this.id = other.id;
-    this.timestamp = other.timestamp;
+    this.timestamp = System.currentTimeMillis();
     this.fire = other.fire;
     this.flush = other.flush;
   }
@@ -181,17 +180,6 @@ public class BogusEvent implements Copyable {
    */
   public long timestamp() {
     return timestamp;
-  }
-
-  /**
-   * Useful when reducing a motion bogus event with higher to lesser dof's.
-   * 
-   * @see remixlab.bias.event.DOF2Event#dof1Event()
-   * @see remixlab.bias.event.DOF3Event#dof2Event()
-   * @see remixlab.bias.event.DOF6Event#dof3Event()
-   */
-  public void modifiedTimestamp(long newtimestamp) {
-    timestamp = newtimestamp;
   }
 
   /**
