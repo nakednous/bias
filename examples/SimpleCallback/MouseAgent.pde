@@ -1,13 +1,11 @@
 public class MouseAgent extends Agent {
-  public static final int LEFT_ID  = PApplet.LEFT, CENTER_ID = PApplet.CENTER, RIGHT_ID = PApplet.RIGHT, WHEEL_ID = MouseEvent.WHEEL, NO_BUTTON = BogusEvent.NO_ID;
-  
-  protected DOF2Event  currentEvent, prevEvent;
-  protected boolean    move, press, drag, release;
-  
+  protected DOF2Event currentEvent, prevEvent;
+  protected boolean move, press, drag, release;
+
   public MouseAgent(InputHandler handler) {
     super(handler);
   }
-  
+
   public void mouseEvent(processing.event.MouseEvent e) {
     move = e.getAction() == processing.event.MouseEvent.MOVE;
     press = e.getAction() == processing.event.MouseEvent.PRESS;
@@ -16,7 +14,7 @@ public class MouseAgent extends Agent {
     //better and more robust is to work without modifiers, which Processing don't report reliably
     if (move || press || drag || release) {
       currentEvent = new DOF2Event(prevEvent, e.getX(), e.getY(),
-          BogusEvent.NO_MODIFIER_MASK, move ? BogusEvent.NO_ID : e.getButton());      
+          BogusEvent.NO_MODIFIER_MASK, move ? BogusEvent.NO_ID : e.getButton());
       if (move)
         updateTrackedGrabber(currentEvent);
       handle(press ? currentEvent.fire() : release ? currentEvent.flush() : currentEvent);
