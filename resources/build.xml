@@ -1,4 +1,4 @@
-<project name="BIASLib" default="clean" basedir="../">
+<project name="BIAS Library" default="clean" basedir="../">
 
     
 <!--	
@@ -52,8 +52,8 @@
 	<property name="project.reference" location="reference"/>
 	<property name="project.dist" location="distribution"/>
 	<property name="project.dist.version" location="distribution/${project.name}-${library.version}"/>
-	<property name="install.source" location="resources/install_instructions.txt"/>
-	<property name="install.destination" location="${project.dist.version}/INSTALL.txt"/>
+	<property name="install.source" location="resources/README.md"/>
+	<property name="install.destination" location="${project.dist.version}/README.md"/>
 	<property name="libprops.source" location="resources/library.properties"/>
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -67,6 +67,7 @@
 		<fileset dir="${classpath.local.location}" includes="${classpath.local.include}" />
 		<fileset dir="${classpath.libraries.location}" includes="**/*.jar" />
 		<fileset dir="${project.lib}" includes="**/*.jar" />
+		<fileset dir="${android_platform.location}" includes="${android_platform.include}" />
 	</path>		
 
 	
@@ -78,7 +79,7 @@
 	
 	<target name="init"> 
 		<echo>${line}
-    Building the Processing library ${project.name} ${library.version}
+    Building the Processing Library ${project.name} ${library.version}
 ${line}
 	src path        ${project.src}
 	bin path        ${project.bin}
@@ -131,9 +132,9 @@ ${line}
 		<!-- copy the jar file to processing's sketchbook libraries folder -->
 		<delete dir="${sketchbook.location}/${folder}/${project.name}" />
   	  	<mkdir dir="${sketchbook.location}/${folder}/${project.name}" />
-  		<copy todir="${sketchbook.location}/${folder}/${project.name}">
-  			<fileset dir="${project.tmp}/${project.name}"/>
-  		</copy> 
+		<copy todir="${sketchbook.location}/${folder}/${project.name}">
+			<fileset dir="${project.tmp}/${project.name}"/>
+		</copy>
 	</target>
 	
 	
@@ -169,7 +170,7 @@ ${line}
   			</fileset>
 	  	</copy>
   		<copy todir="${project.tmp}/${project.name}/src">
-  			<fileset dir="${project.src}"/>
+  			<fileset dir="${project.src}" excludes="**/*.gwt.xml"/>
 	  	</copy>
 	  	<copy todir="${project.tmp}/${project.name}/${folder}">
   			<fileset dir="${project.lib}" excludes="README" />
@@ -209,8 +210,8 @@ ${line}
 	
 	
 	<target name="generate.javadoc" if="is.normal">
-	  	<!-- create the java reference of the library -->
-		<javadoc bottom="Processing library ${project.name} by ${author.name}. ${library.copyright}" 
+	  	<!-- create the java reference of the Library -->
+		<javadoc bottom="Processing Library ${project.name} by ${author.name}. ${library.copyright}" 
 				classpath="${classpath.local.location}/core.jar;{project.bin}" 
 				destdir="${project.tmp}/${project.name}/reference" 
 				verbose="false" 
@@ -271,8 +272,11 @@ ${line}
         <replaceregexp file="${file}" match="##library.version##" replace="${library.version}" flags="g" />
         <replaceregexp file="${file}" match="##library.prettyVersion##" replace="${library.prettyVersion}" flags="g" /> 
         
+        <replaceregexp file="${file}" match="##compatible.minRevision##" replace="${compatible.minRevision}" flags="g" />
+        <replaceregexp file="${file}" match="##compatible.maxRevision##" replace="${compatible.maxRevision}" flags="g" /> 
+        
         <replaceregexp file="${file}" match="##library.url##" replace="${library.url}" flags="g" />
-        <replaceregexp file="${file}" match="##library.category##" replace="${library.category}" flags="g" />
+        <replaceregexp file="${file}" match="##library.categories##" replace="${library.categories}" flags="g" />
         <replaceregexp file="${file}" match="##library.sentence##" replace="${library.sentence}" flags="g" />
     	<replaceregexp file="${file}" match="##library.paragraph##" replace="${library.paragraph}" flags="g" />
     	<replaceregexp file="${file}" match="##library.keywords##" replace="${library.keywords}" flags="g" />
@@ -289,7 +293,7 @@ ${line}
 	
 	
 	<target name="generate.install.library" if="is.normal">	
-		<copy file="${install.source}" tofile="${project.dist.version}/INSTALL.txt" />
+		<copy file="${install.source}" tofile="${install.destination}" />
 		
 		<antcall target="parse.file"><param name="file" value="${install.destination}"/></antcall>
 	</target>	
@@ -297,7 +301,7 @@ ${line}
 	
 	
 	<target name="generate.zip" if="is.normal">
-		<!-- zip the distribution of the library -->
+		<!-- zip the distribution of the Library -->
 		
 		<move todir="${project.dist.version}/tmp/${project.name}">
   			<fileset dir="${project.dist.version}/${project.name}" />
@@ -383,4 +387,3 @@ ${line}
 	</target>
 	
 </project>
-
