@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact name="p5bias:GWT">
+    <output-path>$PROJECT_DIR$/out/artifacts/p5bias_GWT</output-path>
+    <root id="root">
+      <element id="gwt-compiler-output" facet="p5bias/gwt/GWT" />
+    </root>
+  </artifact>
+</component>
