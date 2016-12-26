@@ -4,7 +4,7 @@
 <module>
     <inherits name="com.google.gwt.user.User"/>
     <source path="">
-        <exclude name="**/ext/**"/>
+        <exclude name="**/Profile.*" />
     </source>
     <inherits name='org.timepedia.exporter.Exporter'/>
     <set-property name="export" value="yes"/>
