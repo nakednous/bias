@@ -11,9 +11,8 @@
  * Use a SpaceNavigator to control the ellipses.
  */
 
-import remixlab.bias.core.*;
+import remixlab.bias.*;
 import remixlab.bias.event.*;
-import remixlab.bias.ext.*;
 
 import org.gamecontrolplus.*;
 import net.java.games.input.*;
