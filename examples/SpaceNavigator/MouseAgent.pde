@@ -18,6 +18,7 @@ public class MouseAgent extends Agent {
           BogusEvent.NO_MODIFIER_MASK, move ? BogusEvent.NO_ID : e.getButton());
       if (move && !click2Pick)
         updateTrackedGrabber(currentEvent);
+      hidAgent.setDefaultGrabber(trackedGrabber());
       handle(press ? currentEvent.fire() : release ? currentEvent.flush() : currentEvent);
       prevEvent = currentEvent.get();
       return;
@@ -31,6 +32,7 @@ public class MouseAgent extends Agent {
           BogusEvent.NO_MODIFIER_MASK, e.getButton(), e.getCount());
       if (click2Pick)
         updateTrackedGrabber(bogusClickEvent);
+      hidAgent.setDefaultGrabber(trackedGrabber());
       handle(bogusClickEvent);
       return;
     }
