@@ -3,7 +3,7 @@
  * by Jean Pierre Charalambos.
  *
  * Notice that this example needs special requirements.
- * 
+ *
  * Documentation (including requirements) found on the online
  * tutorial: https://github.com/nakednous/bias/wiki/1.4.-SpaceNavigator
  *
@@ -17,7 +17,16 @@ import remixlab.bias.event.*;
 import org.gamecontrolplus.*;
 import net.java.games.input.*;
 
-int SN_ID;// id of the SpaceNavigator gesture
+public static final int LEFT_ID = MotionShortcut.registerID(37, 2, "LEFT"), CENTER_ID = MotionShortcut
+    .registerID(3, 2, "CENTER"), RIGHT_ID = MotionShortcut.registerID(39, 2, "RIGHT"), WHEEL_ID = MotionShortcut
+    .registerID(8, 1, "WHEEL"), NO_BUTTON = MotionShortcut
+    .registerID(BogusEvent.NO_ID, 2, "NO_BUTTON"), LEFT_CLICK_ID = ClickShortcut
+    .registerID(LEFT_ID, "LEFT"), RIGHT_CLICK_ID = ClickShortcut
+    .registerID(RIGHT_ID, "RIGHT"), CENTER_CLICK_ID = ClickShortcut.registerID(CENTER_ID, "CENTER");
+
+// id of the SpaceNavigator gesture
+public static final int SN_ID = MotionShortcut.registerID(6, "SN_SENSOR");
+
 MouseAgent agent;
 HIDAgent hidAgent;
 InputHandler inputHandler;
@@ -73,10 +82,10 @@ void keyPressed() {
 
 void openSpaceNavigator() {
   println(System.getProperty("os.name"));
-  control = ControlIO.getInstance(this);  
-  String os = System.getProperty("os.name").toLowerCase();  
+  control = ControlIO.getInstance(this);
+  String os = System.getProperty("os.name").toLowerCase();
   if (os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0)
-    device = control.getDevice("3Dconnexion SpaceNavigator");// magic name for linux    
+    device = control.getDevice("3Dconnexion SpaceNavigator");// magic name for linux
   else
     device = control.getDevice("SpaceNavigator");//magic name, for windows
   if (device == null) {
