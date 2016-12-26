@@ -7,9 +7,8 @@
  * Use the mouse (move, drag or click it) to control the ellipses.
  */
 
-import remixlab.bias.core.*;
+import remixlab.bias.*;
 import remixlab.bias.event.*;
-import remixlab.bias.ext.*;
 
 MouseAgent agent;
 InputHandler inputHandler;
