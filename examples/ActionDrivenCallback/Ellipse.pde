@@ -1,14 +1,12 @@
-public class Ellipse extends GrabberObject {
+public class Ellipse extends InteractiveGrabberObject {
   public float radiusX, radiusY;
   public PVector center;
   public color colour;
   public int contourColour;
   public int sWeight;
-  protected Profile profile;
 
   public Ellipse(InputHandler handler) {
     super(handler);
-    setProfile(new Profile(this));
     setMouseDragBindings();
     setColor();
     setPosition();
@@ -18,51 +16,39 @@ public class Ellipse extends GrabberObject {
 
   public Ellipse(InputHandler handler, PVector c, float r) {
     super(handler);
-    setProfile(new Profile(this));
     setMouseDragBindings();
     radiusX = r;
     radiusY = r;
-    center = c;    
+    center = c;
     setColor();
     sWeight = 4;
   }
-  
+
   public void setMouseDragBindings() {
-    profile().removeBindings();
-    profile().setBinding(new MotionShortcut(LEFT), "setPosition");
-    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
-    profile().setBinding(new ClickShortcut(LEFT, 1), "setColor");
-  }
-  
-  public void setMouseMoveBindings() {
-    profile().removeBindings();
-    profile().setBinding(new MotionShortcut(NO_BUTTON), "setPosition");
-    profile().setBinding(new MotionShortcut(RIGHT), "setShape");
-  }
-  
-  public Profile profile() {
-    return profile;
+    removeBindings();
+    setBinding(new MotionShortcut(LEFT), "setPosition");
+    setBinding(new MotionShortcut(RIGHT), "setShape");
+    setBinding(new ClickShortcut(LEFT, 1), "setColor");
   }
 
-  public void setProfile(Profile p) {
-    if (p.grabber() == this)
-      profile = p;
-    else
-      System.out.println("Nothing done, profile grabber is different than this grabber");
+  public void setMouseMoveBindings() {
+    removeBindings();
+    setBinding(new MotionShortcut(NO_BUTTON), "setPosition");
+    setBinding(new MotionShortcut(RIGHT), "setShape");
   }
 
   public void setColor(color myC) {
     colour = myC;
   }
-  
+
   public void setColor() {
     setColor(color(random(0, 255), random(0, 255), random(0, 255), random(100, 200)));
   }
-  
+
   public void setPosition(DOF2Event event) {
     setPositionAndRadii(new PVector(event.x(), event.y()), radiusX, radiusY);
   }
-  
+
   public void setShape(DOF2Event event) {
     radiusX += event.dx();
     radiusY += event.dy();
@@ -100,18 +86,13 @@ public class Ellipse extends GrabberObject {
   public boolean checkIfGrabsInput(DOF2Event event) {
     return checkIfGrabsInput(event.x(), event.y());
   }
-  
+
   @Override
   public boolean checkIfGrabsInput(ClickEvent event) {
     return checkIfGrabsInput(event.x(), event.y());
   }
-  
+
   public boolean checkIfGrabsInput(float x, float y) {
     return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
-  }
-  
-  @Override
-  public void performInteraction(BogusEvent event) {
-    profile().handle(event);
   }
 }
