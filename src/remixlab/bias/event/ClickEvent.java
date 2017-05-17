@@ -10,36 +10,14 @@
 
 package remixlab.bias.event;
 
-import remixlab.bias.BogusEvent;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
+import remixlab.bias.Event;
 
 /**
  * A click event encapsulates a {@link remixlab.bias.event.ClickShortcut} and it's defined
  * by the number of clicks. A click event holds the position where the event occurred (
  * {@link #x()} and {@link #y()}).
  */
-public class ClickEvent extends BogusEvent {
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(x).append(y).append(numberOfClicks)
-        .toHashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null)
-      return false;
-    if (obj == this)
-      return true;
-    if (obj.getClass() != getClass())
-      return false;
-
-    ClickEvent other = (ClickEvent) obj;
-    return new EqualsBuilder().appendSuper(super.equals(obj)).append(numberOfClicks, other.numberOfClicks)
-        .append(x, other.x).append(y, other.y).isEquals();
-  }
-
+public class ClickEvent extends Event {
   protected float x, y;
   protected final int numberOfClicks;
 

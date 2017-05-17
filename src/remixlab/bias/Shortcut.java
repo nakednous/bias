@@ -10,26 +10,26 @@
 
 package remixlab.bias;
 
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
+import remixlab.bias.event.KeyEvent;
+import remixlab.bias.event.KeyShortcut;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * Shortcuts are {@link BogusEvent} means to bind user-defined actions
- * from a {@link BogusEvent}.
+ * Shortcuts are {@link Event} means to bind user-defined actions
+ * from a {@link Event}.
  * <p>
- * Every {@link BogusEvent} instance has a shortcut which represents a
+ * Every {@link Event} instance has a shortcut which represents a
  * gesture-{@link #id()}, for instance, the button being dragged and the modifier key
  * pressed (see {@link #modifiers()}) at the very moment an user interaction takes place,
  * such as when she drags a giving mouse button while pressing the 'CTRL' modifier key.
- * See {@link BogusEvent#shortcut()}. Note that for the shortcut
+ * See {@link Event#shortcut()}. Note that for the shortcut
  * {@link #description()} to work properly, gesture-{@link #id()}s should be registered at
  * the shortcut class first (see {@link #registerID(String)}).
  * <p>
- * Different bogus event types should be related to different shortcuts. The current
+ * Different event types should be related to different shortcuts. The current
  * implementation supports the following event/shortcut types:
  * <ol>
  * <li>{@link remixlab.bias.event.MotionEvent} /
@@ -39,11 +39,11 @@ import java.util.HashMap;
  * related to motion shortcuts.</li>
  * <li>{@link remixlab.bias.event.ClickEvent} / {@link remixlab.bias.event.ClickShortcut}
  * </li>
- * <li>{@link remixlab.bias.event.KeyboardEvent} /
- * {@link remixlab.bias.event.KeyboardShortcut}</li>
+ * <li>{@link KeyEvent} /
+ * {@link KeyShortcut}</li>
  * </ol>
  * If you ever need to define your own shortcut type (such as when declaring a custom
- * bogus-event type) derive from this class and override {@link #eventClass()}.e.g.,
+ * event type) derive from this class and override {@link #eventClass()}.e.g.,
  * <p>
  * <pre>
  * {@code
@@ -68,24 +68,6 @@ import java.util.HashMap;
  * {@link #hashCode()} and {@link #equals(Object)} methods should be overridden as well.
  */
 public class Shortcut {
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37).append(mask).append(id).toHashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null)
-      return false;
-    if (obj == this)
-      return true;
-    if (obj.getClass() != getClass())
-      return false;
-
-    Shortcut other = (Shortcut) obj;
-    return new EqualsBuilder().append(mask, other.mask).append(id, other.id).isEquals();
-  }
-
   protected final int mask;
   protected final int id;
   protected static HashMap<String, String> ids = new HashMap<String, String>();
@@ -95,8 +77,8 @@ public class Shortcut {
    * parameter being NO_NOMODIFIER_MASK.
    */
   public Shortcut() {
-    mask = BogusEvent.NO_MODIFIER_MASK;
-    id = BogusEvent.NO_ID;
+    mask = Event.NO_MODIFIER_MASK;
+    id = Event.NO_ID;
   }
 
   /**
@@ -105,7 +87,7 @@ public class Shortcut {
    * @param _id gesture-id
    */
   public Shortcut(int _id) {
-    mask = BogusEvent.NO_MODIFIER_MASK;
+    mask = Event.NO_MODIFIER_MASK;
     id = _id;
   }
 
@@ -197,7 +179,7 @@ public class Shortcut {
    * @return description as a String
    */
   public String description() {
-    String m = BogusEvent.modifiersText(mask);
+    String m = Event.modifiersText(mask);
     String i = ids.get(getClass().getSimpleName() + String.valueOf(id));
     return ((m.length() > 0) ? m + "+" + i : i);
   }
@@ -214,27 +196,5 @@ public class Shortcut {
    */
   public int id() {
     return id;
-  }
-
-  /**
-   * Returns the event class this shortcut is to be attached to. Should be non-null.
-   *
-   * @see #defaultEventClass()
-   */
-  protected Class<? extends BogusEvent> eventClass() {
-    return BogusEvent.class;
-  }
-
-  /**
-   * Returns the default-event class (alternative to {@link #eventClass()}) this shortcut is
-   * to be attached to. Default value is {@code null}.
-   * <p>
-   * Override it when an optional {@link #eventClass()} is needed (rarely). For an example
-   * refer to the {@code MotionEvent} implementation.
-   *
-   * @see #eventClass()
-   */
-  protected Class<? extends BogusEvent> defaultEventClass() {
-    return null;
   }
 }

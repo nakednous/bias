@@ -10,10 +10,8 @@
 
 package remixlab.bias.event;
 
-import remixlab.bias.BogusEvent;
+import remixlab.bias.Event;
 import remixlab.bias.Shortcut;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
 
 /**
  * This class represents {@link remixlab.bias.event.ClickEvent} shortcuts.
@@ -25,24 +23,6 @@ import remixlab.util.HashCodeBuilder;
  * Note that click shortcuts should have at least one click.
  */
 public class ClickShortcut extends Shortcut {
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(numberOfClicks).toHashCode();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null)
-      return false;
-    if (obj == this)
-      return true;
-    if (obj.getClass() != getClass())
-      return false;
-
-    ClickShortcut other = (ClickShortcut) obj;
-    return new EqualsBuilder().appendSuper(super.equals(obj)).append(numberOfClicks, other.numberOfClicks).isEquals();
-  }
-
   protected final int numberOfClicks;
 
   /**
@@ -51,7 +31,7 @@ public class ClickShortcut extends Shortcut {
    * @param id id
    */
   public ClickShortcut(int id) {
-    this(BogusEvent.NO_MODIFIER_MASK, id, 1);
+    this(Event.NO_MODIFIER_MASK, id, 1);
   }
 
   /**
@@ -61,7 +41,7 @@ public class ClickShortcut extends Shortcut {
    * @param c  number of clicks
    */
   public ClickShortcut(int id, int c) {
-    this(BogusEvent.NO_MODIFIER_MASK, id, c);
+    this(Event.NO_MODIFIER_MASK, id, c);
   }
 
   /**
@@ -78,11 +58,6 @@ public class ClickShortcut extends Shortcut {
       this.numberOfClicks = 1;
     else
       this.numberOfClicks = c;
-  }
-
-  @Override
-  public Class<? extends ClickEvent> eventClass() {
-    return ClickEvent.class;
   }
 
   /**

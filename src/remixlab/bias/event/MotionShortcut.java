@@ -128,38 +128,4 @@ public final class MotionShortcut extends Shortcut {
   public MotionShortcut(int m, int id) {
     super(m, id);
   }
-
-  /**
-   * Returns {@code DOFnEvent.class} where {@code n} is {@link #dofs(int)}.
-   * <p>
-   * Returns {@code MotionEvent.class} if the shortcut {@link #id()} isn't registered.
-   *
-   * @see #dofs(int)
-   * @see MotionShortcut#registerID(int, int, String)
-   */
-  @Override
-  public Class<? extends MotionEvent> eventClass() {
-    Class<? extends MotionEvent> clazz = MotionEvent.class;
-    if ((Integer) dofs(id()) != null)
-      switch (dofs(id())) {
-        case 1:
-          clazz = DOF1Event.class;
-          break;
-        case 2:
-          clazz = DOF2Event.class;
-          break;
-        case 3:
-          clazz = DOF3Event.class;
-          break;
-        case 6:
-          clazz = DOF6Event.class;
-          break;
-      }
-    return clazz;
-  }
-
-  @Override
-  public Class<? extends MotionEvent> defaultEventClass() {
-    return MotionEvent.class;
-  }
 }
