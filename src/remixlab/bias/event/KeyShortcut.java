@@ -59,4 +59,11 @@ public final class KeyShortcut extends Shortcut {
   public char getKey() {
     return key;
   }
+
+  @Override
+  public boolean same(Shortcut other) {
+    if(other instanceof KeyShortcut)
+      return super.same(other) && getKey() == ((KeyShortcut) other).getKey();
+    return false;
+  }
 }

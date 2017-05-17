@@ -36,6 +36,11 @@ public class Ellipse extends GrabberObject {
   public void setPosition(DOF2Event event) {
     setPositionAndRadii(new PVector(event.x(), event.y()), radiusX, radiusY);
   }
+  
+  public void setShape(DOF1Event event) {
+    radiusX += event.dx();
+    radiusY += event.dx();
+  }
 
   public void setShape(DOF2Event event) {
     radiusX += event.dx();
@@ -79,31 +84,37 @@ public class Ellipse extends GrabberObject {
   }
 
   @Override
-    public void performInteraction(DOF2Event event) {
+  public void performInteraction(DOF2Event event) { 
     if (move) {
-      if (event.shortcut() == new MotionShortcut(NO_BUTTON))
+      if (event.shortcut().same(new Shortcut(remixlab.bias.Event.NO_ID)))
         setPosition(event);
     } else {
-      if (event.shortcut() == new MotionShortcut(LEFT))
+      if (event.shortcut().same(new Shortcut(LEFT)))
         setPosition(event);
     }
-    if (event.shortcut() == new MotionShortcut(RIGHT))
+    if (event.shortcut().same(new Shortcut(RIGHT)))
+      setShape(event);
+  }
+  
+  @Override
+  public void performInteraction(DOF1Event event) {
+    if (event.shortcut().same(new Shortcut(remixlab.bias.Event.CTRL, processing.event.MouseEvent.WHEEL)))
       setShape(event);
   }
 
   @Override
-    public void performInteraction(ClickEvent event) {
-    if (event.shortcut() == new ClickShortcut(LEFT, 1))
+  public void performInteraction(ClickEvent event) {
+    if (event.shortcut().same(new ClickShortcut(LEFT, 1)))
       setColor();
   }
 
   @Override
-    public boolean checkIfGrabsInput(DOF2Event event) {
+  public boolean checkIfGrabsInput(DOF2Event event) {
     return checkIfGrabsInput(event.x(), event.y());
   }
 
   @Override
-    public boolean checkIfGrabsInput(ClickEvent event) {
+  public boolean checkIfGrabsInput(ClickEvent event) {
     return checkIfGrabsInput(event.x(), event.y());
   }
 

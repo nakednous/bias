@@ -5,29 +5,28 @@ public class MouseAgent extends Agent {
   public MouseAgent(InputHandler handler) {
     super(handler);
   }
-
+  
   public void mouseEvent(processing.event.MouseEvent e) {
     move = e.getAction() == processing.event.MouseEvent.MOVE;
     press = e.getAction() == processing.event.MouseEvent.PRESS;
     drag = e.getAction() == processing.event.MouseEvent.DRAG;
     release = e.getAction() == processing.event.MouseEvent.RELEASE;
-    //better and more robust is to work without modifiers, which Processing don't report reliably
     if (move || press || drag || release) {
       currentEvent = new DOF2Event(prevEvent, e.getX(), e.getY(),
-          remixlab.bias.Event.NO_MODIFIER_MASK, move ? remixlab.bias.Event.NO_ID : e.getButton());
+          e.getModifiers(), move ? remixlab.bias.Event.NO_ID : e.getButton());
       if (move)
         updateTrackedGrabber(currentEvent);
       handle(press ? currentEvent.fire() : release ? currentEvent.flush() : currentEvent);
       prevEvent = currentEvent.get();
       return;
     }
-    if (e.getAction() == processing.event.MouseEvent.WHEEL) {// e.getAction() = MouseEvent.WHEEL = 8
-      handle(new DOF1Event(e.getCount(), remixlab.bias.Event.NO_MODIFIER_MASK, WHEEL_ID));
+    if (e.getAction() == processing.event.MouseEvent.WHEEL) {
+      handle(new DOF1Event(e.getCount(), e.getModifiers(), processing.event.MouseEvent.WHEEL));
       return;
     }
     if (e.getAction() == processing.event.MouseEvent.CLICK) {
       ClickEvent bogusClickEvent = new ClickEvent(e.getX(), e.getY(),
-          remixlab.bias.Event.NO_MODIFIER_MASK, e.getButton(), e.getCount());
+          e.getModifiers(), e.getButton(), e.getCount());
       handle(bogusClickEvent);
       return;
     }

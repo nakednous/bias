@@ -85,4 +85,12 @@ public class Shortcut {
   public int id() {
     return id;
   }
+
+  /**
+   * Returns whether or not this shortcut equals other.
+   * @param other shortcut
+   */
+  public boolean same(Shortcut other) {
+    return id() == other.id() && modifiers() == other.modifiers();
+  }
 }

@@ -16,8 +16,7 @@ import remixlab.bias.Event;
  * Base class of all DOF_n_Events: {@link Event}s defined from
  * DOFs (degrees-of-freedom).
  * <p>
- * A MotionEvent encapsulates a {@link remixlab.bias.event.MotionShortcut}. MotionEvents
- * may be relative or absolute (see {@link #isRelative()}, {@link #isAbsolute()})
+ * MotionEvents may be relative or absolute (see {@link #isRelative()}, {@link #isAbsolute()})
  * depending whether or not they're constructed from a previous MotionEvent. While
  * relative motion events have {@link #distance()}, {@link #speed()}, and
  * {@link #delay()}, absolute motion events don't.
@@ -31,7 +30,7 @@ public class MotionEvent extends Event {
 
   /**
    * Constructs an absolute MotionEvent with an "empty"
-   * {@link remixlab.bias.event.MotionShortcut}.
+   * {@link remixlab.bias.Shortcut}.
    */
   public MotionEvent() {
     super();
@@ -39,7 +38,7 @@ public class MotionEvent extends Event {
 
   /**
    * Constructs an absolute MotionEvent taking the given {@code modifiers} as a
-   * {@link remixlab.bias.event.MotionShortcut}.
+   * {@link remixlab.bias.Shortcut}.
    */
   public MotionEvent(int modifiers) {
     super(modifiers, NO_ID);
@@ -47,7 +46,7 @@ public class MotionEvent extends Event {
 
   /**
    * Constructs an absolute MotionEvent taking the given {@code modifiers} and
-   * {@code modifiers} as a {@link remixlab.bias.event.MotionShortcut}.
+   * {@code modifiers} as a {@link remixlab.bias.Shortcut}.
    */
   public MotionEvent(int modifiers, int id) {
     super(modifiers, id);
@@ -81,11 +80,6 @@ public class MotionEvent extends Event {
    * {@link #isAbsolute()}.
    */
   public void modulate(float[] sens) {
-  }
-
-  @Override
-  public MotionShortcut shortcut() {
-    return new MotionShortcut(modifiers(), id());
   }
 
   /**
