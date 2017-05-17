@@ -13,7 +13,7 @@ package remixlab.bias.event;
 import remixlab.bias.Event;
 
 /**
- * A keyevent is a {@link Event} specialization that
+ * A key-event is an {@link Event} specialization that
  * encapsulates a {@link KeyShortcut}. Key shortcuts may be
  * of one form out of two: 1. A single Character; or, 2. A modifier mask (such as: (ALT |
  * SHIFT)) plus a virtual-key.

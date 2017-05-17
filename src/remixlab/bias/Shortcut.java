@@ -18,23 +18,19 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * Shortcuts are {@link Event} means to bind user-defined actions
- * from a {@link Event}.
- * <p>
  * Every {@link Event} instance has a shortcut which represents a
- * gesture-{@link #id()}, for instance, the button being dragged and the modifier key
+ * gesture-{@link #id()}. For instance, the button being dragged and the modifier key
  * pressed (see {@link #modifiers()}) at the very moment an user interaction takes place,
  * such as when she drags a giving mouse button while pressing the 'CTRL' modifier key.
  * See {@link Event#shortcut()}.
  * <p>
- * Different event types should be related to different shortcuts. The current
- * implementation supports the following event/shortcut types:
+ * The current implementation supports the following event/shortcut types:
  * <ol>
  * <li>{@link remixlab.bias.event.MotionEvent} /
- * {@link remixlab.bias.event.MotionShortcut}. Note that motion-event derived classes:
+ * {@link remixlab.bias.Shortcut}. Note that motion-event derived classes:
  * {@link remixlab.bias.event.DOF1Event}, {@link remixlab.bias.event.DOF2Event},
  * {@link remixlab.bias.event.DOF3Event}, {@link remixlab.bias.event.DOF6Event}, are also
- * related to motion shortcuts.</li>
+ * related to shortcuts.</li>
  * <li>{@link remixlab.bias.event.ClickEvent} / {@link remixlab.bias.event.ClickShortcut}
  * </li>
  * <li>{@link KeyEvent} /
@@ -65,6 +61,8 @@ public class Shortcut {
   }
 
   /**
+   * Defines a shortcut from the given modifier mask and id
+   *
    * @param m modifier mask defining the shortcut
    */
   public Shortcut(int m, int i) {
@@ -88,6 +86,7 @@ public class Shortcut {
 
   /**
    * Returns whether or not this shortcut matches the other.
+   *
    * @param other shortcut
    */
   public boolean matches(Shortcut other) {
