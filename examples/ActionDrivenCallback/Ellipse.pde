@@ -86,25 +86,25 @@ public class Ellipse extends GrabberObject {
   @Override
   public void performInteraction(DOF2Event event) { 
     if (move) {
-      if (event.shortcut().same(new Shortcut(remixlab.bias.Event.NO_ID)))
+      if (event.shortcut().matches(new Shortcut(remixlab.bias.Event.NO_ID)))
         setPosition(event);
     } else {
-      if (event.shortcut().same(new Shortcut(LEFT)))
+      if (event.shortcut().matches(new Shortcut(LEFT)))
         setPosition(event);
     }
-    if (event.shortcut().same(new Shortcut(RIGHT)))
+    if (event.shortcut().matches(new Shortcut(RIGHT)))
       setShape(event);
   }
   
   @Override
   public void performInteraction(DOF1Event event) {
-    if (event.shortcut().same(new Shortcut(remixlab.bias.Event.CTRL, processing.event.MouseEvent.WHEEL)))
+    if (event.shortcut().matches(new Shortcut(remixlab.bias.Event.CTRL, processing.event.MouseEvent.WHEEL)))
       setShape(event);
   }
 
   @Override
   public void performInteraction(ClickEvent event) {
-    if (event.shortcut().same(new ClickShortcut(LEFT, 1)))
+    if (event.shortcut().matches(new ClickShortcut(LEFT, 1)))
       setColor();
   }
 

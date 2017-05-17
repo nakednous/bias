@@ -220,7 +220,7 @@ public abstract class Agent {
         trackedGrabber = dG;
         return trackedGrabber();
       }
-    // then if tracked grabber remains the same:
+    // then if tracked grabber remains the matches:
     Grabber tG = trackedGrabber();
     if (tG != null)
       if (tG.checkIfGrabsInput(event))
