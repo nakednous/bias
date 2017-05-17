@@ -1,8 +1,8 @@
 /**
- * Action Driven Callback
+ * Shortcut-based Event Parsing
  * by Jean Pierre Charalambos
  *
- * Use the mouse (move, drag or click it) to control the ellipses.
+ * Event parsing is based on the event.shortcut()
  */
 
 import remixlab.bias.*;

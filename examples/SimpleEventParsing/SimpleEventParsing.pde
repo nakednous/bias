@@ -1,6 +1,8 @@
 /**
- * Simple Callback
+ * Simple Event Parsing
  * by Jean Pierre Charalambos
+ *
+ * Event parsing is based on the event.id()
  */
 
 import remixlab.bias.*;
