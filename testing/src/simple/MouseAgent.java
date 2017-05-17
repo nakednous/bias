@@ -22,7 +22,7 @@ public class MouseAgent extends Agent {
     //better and more robust is to work without modifiers, which Processing don't report reliably
     if (move || press || drag || release) {
       currentEvent = new DOF2Event(prevEvent, e.getX(), e.getY(),
-          BogusEvent.NO_MODIFIER_MASK, move ? BogusEvent.NO_ID : e.getButton());
+          Event.NO_MODIFIER_MASK, move ? Event.NO_ID : e.getButton());
       if (move)
         updateTrackedGrabber(currentEvent);
       handle(press ? currentEvent.fire() : release ? currentEvent.flush() : currentEvent);
@@ -30,12 +30,12 @@ public class MouseAgent extends Agent {
       return;
     }
     if (e.getAction() == processing.event.MouseEvent.WHEEL) {// e.getAction() = MouseEvent.WHEEL = 8
-      handle(new DOF1Event(e.getCount(), BogusEvent.NO_MODIFIER_MASK, SimpleCallback.WHEEL_ID));
+      handle(new DOF1Event(e.getCount(), Event.NO_MODIFIER_MASK, SimpleCallback.WHEEL_ID));
       return;
     }
     if (e.getAction() == processing.event.MouseEvent.CLICK) {
       ClickEvent bogusClickEvent = new ClickEvent(e.getX(), e.getY(),
-          BogusEvent.NO_MODIFIER_MASK, e.getButton(), e.getCount());
+          Event.NO_MODIFIER_MASK, e.getButton(), e.getCount());
       handle(bogusClickEvent);
       return;
     }

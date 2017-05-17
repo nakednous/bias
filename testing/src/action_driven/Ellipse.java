@@ -14,13 +14,10 @@ public class Ellipse extends GrabberObject {
   public int colour;
   public int contourColour;
   public int sWeight;
-  protected Profile profile;
 
   public Ellipse(PApplet p, InputHandler handler) {
     super(handler);
     parent = p;
-    setProfile(new Profile(this));
-    setMouseDragBindings();
     setColor();
     setPosition();
     sWeight = 4;
@@ -30,37 +27,11 @@ public class Ellipse extends GrabberObject {
   public Ellipse(PApplet p, InputHandler handler, PVector c, float r) {
     super(handler);
     parent = p;
-    setProfile(new Profile(this));
-    setMouseDragBindings();
     radiusX = r;
     radiusY = r;
     center = c;
     setColor();
     sWeight = 4;
-  }
-
-  public void setMouseDragBindings() {
-    profile().removeBindings();
-    profile().setBinding(new MotionShortcut(ActionDrivenCallback.LEFT_ID), "setPosition");
-    profile().setBinding(new MotionShortcut(ActionDrivenCallback.RIGHT_ID), "setShape");
-    profile().setBinding(new ClickShortcut(ActionDrivenCallback.LEFT_CLICK_ID, 1), "setColor");
-  }
-
-  public void setMouseMoveBindings() {
-    profile().removeBindings();
-    profile().setBinding(new MotionShortcut(ActionDrivenCallback.NO_BUTTON), "setPosition");
-    profile().setBinding(new MotionShortcut(ActionDrivenCallback.RIGHT_ID), "setShape");
-  }
-
-  public Profile profile() {
-    return profile;
-  }
-
-  public void setProfile(Profile p) {
-    if (p.grabber() == this)
-      profile = p;
-    else
-      System.out.println("Nothing done, profile grabber is different than this grabber");
   }
 
   public void setColor(int myC) {
@@ -120,10 +91,5 @@ public class Ellipse extends GrabberObject {
 
   public boolean checkIfGrabsInput(float x, float y) {
     return(PApplet.pow((x - center.x), 2)/PApplet.pow(radiusX, 2) + PApplet.pow((y - center.y), 2)/PApplet.pow(radiusY, 2) <= 1);
-  }
-
-  @Override
-  public void performInteraction(BogusEvent event) {
-    profile().handle(event);
   }
 }
