@@ -54,33 +54,6 @@ public final class KeyShortcut extends Shortcut {
   }
 
   /**
-   * Same as {@code return Shortcut.registerID(KeyShortcut.class, id, description)}.
-   *
-   * @see Shortcut#registerID(Class, int, String)
-   * @see #hasID(int)
-   */
-  public static int registerID(int id, String description) {
-    return Shortcut.registerID(KeyShortcut.class, id, description);
-  }
-
-  /**
-   * Same as {@code return Shortcut.hasID(KeyShortcut.class, id)}.
-   *
-   * @see Shortcut#hasID(Class, int)
-   * @see #registerID(int, String)
-   */
-  public static boolean hasID(int id) {
-    return Shortcut.hasID(KeyShortcut.class, id);
-  }
-
-  @Override
-  public String description() {
-    if (key != '\0')
-      return String.valueOf(key);
-    return super.description();
-  }
-
-  /**
    * Returns the key-shortcut key.
    */
   public char getKey() {

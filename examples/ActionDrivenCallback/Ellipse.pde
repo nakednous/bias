@@ -1,9 +1,10 @@
-public class Ellipse extends InteractiveGrabberObject {
+public class Ellipse extends GrabberObject {
   public float radiusX, radiusY;
   public PVector center;
   public color colour;
   public int contourColour;
   public int sWeight;
+  public boolean move;
 
   public Ellipse(InputHandler handler) {
     super(handler);
@@ -22,19 +23,6 @@ public class Ellipse extends InteractiveGrabberObject {
     center = c;
     setColor();
     sWeight = 4;
-  }
-
-  public void setMouseDragBindings() {
-    removeBindings();
-    setBinding(new MotionShortcut(LEFT), "setPosition");
-    setBinding(new MotionShortcut(RIGHT), "setShape");
-    setBinding(new ClickShortcut(LEFT, 1), "setColor");
-  }
-
-  public void setMouseMoveBindings() {
-    removeBindings();
-    setBinding(new MotionShortcut(NO_BUTTON), "setPosition");
-    setBinding(new MotionShortcut(RIGHT), "setShape");
   }
 
   public void setColor(color myC) {
@@ -82,13 +70,40 @@ public class Ellipse extends InteractiveGrabberObject {
     popStyle();
   }
 
+  public void setMouseDragBindings() {
+    move = false;
+  }
+
+  public void setMouseMoveBindings() {
+    move = true;
+  }
+
   @Override
-  public boolean checkIfGrabsInput(DOF2Event event) {
+    public void performInteraction(DOF2Event event) {
+    if (move) {
+      if (event.shortcut() == new MotionShortcut(NO_BUTTON))
+        setPosition(event);
+    } else {
+      if (event.shortcut() == new MotionShortcut(LEFT))
+        setPosition(event);
+    }
+    if (event.shortcut() == new MotionShortcut(RIGHT))
+      setShape(event);
+  }
+
+  @Override
+    public void performInteraction(ClickEvent event) {
+    if (event.shortcut() == new ClickShortcut(LEFT, 1))
+      setColor();
+  }
+
+  @Override
+    public boolean checkIfGrabsInput(DOF2Event event) {
     return checkIfGrabsInput(event.x(), event.y());
   }
 
   @Override
-  public boolean checkIfGrabsInput(ClickEvent event) {
+    public boolean checkIfGrabsInput(ClickEvent event) {
     return checkIfGrabsInput(event.x(), event.y());
   }
 
